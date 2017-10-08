@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import net.saga.game.cloclo.characters.Boy;
+import net.saga.game.cloclo.characters.PuzzleMapScreen;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
 import net.saga.game.farfar.util.controller.LoggingControllerListenerProxyUtil;
 import net.saga.game.farfar.util.player.PlayerController;
@@ -23,17 +24,21 @@ public class CloCloGame extends ApplicationAdapter {
 	private PlayerController playerController;
     private Viewport viewport;
 
+    public static final int WORLD_WIDTH = 320;
+    public static final int WORLD_HEIGHT = 240;
+
 	Controller controller = null;
     private Stage stage;
-
-    private Boy boy;
+    private Texture globalSheet;
+    private PuzzleMapScreen mapScreen;
 
     @Override
 	public void create () {
-        this.boy = new Boy();
-        viewport = new FitViewport(320,240);
+        globalSheet = new Texture(Gdx.files.internal("spritesheet.png"));
+        this.mapScreen = new PuzzleMapScreen(globalSheet);
+        viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT);
         stage = new Stage(viewport);
-        stage.addActor(boy);
+        stage.addActor(mapScreen);
 
 
         if (controller == null) {
@@ -43,25 +48,15 @@ public class CloCloGame extends ApplicationAdapter {
                 throw new RuntimeException("No Controller");
             }
             Gdx.app.debug("Controller", controller.getName());
-            addControllerListeners(controller);
+            mapScreen.addControllerListeners(controller);
         }
         
 	}
 
-    private void addControllerListeners(Controller controller) {
-        controller.addListener(LoggingControllerListenerProxyUtil.getLoggingListener());
-        controller.addListener(boy);
-        controller.addListener((OnButtonDown) (Controller controller1, int buttonCode) -> {
-            if (buttonCode == Xbox.BACK) {
-                Gdx.app.exit();
-            }
-            return false;
-        });
-    }
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
         stage.act();
         stage.draw();
@@ -75,7 +70,9 @@ public class CloCloGame extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        boy.dispose();
+        globalSheet.dispose();
     }
+
+
+
 }
