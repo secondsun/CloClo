@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import net.saga.game.cloclo.characters.obstacle.EmeraldBlock;
 import net.saga.game.cloclo.characters.obstacle.Tree;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
 
@@ -45,6 +46,7 @@ public class PuzzleMapScreen extends Actor {
             for (int j = 2; j < 8; j++) {
                 if (i%3 == 1 && j%3 == 1) {
                     obstacles.add(new Tree(spritesheet, i * 16, j*16));
+                    obstacles.add(new EmeraldBlock(spritesheet, (1+i) * 16, j*16, this));
                 }
             }
         }
@@ -60,7 +62,7 @@ public class PuzzleMapScreen extends Actor {
     }
 
     private void drawObstacles(Batch batch) {
-        obstacles.stream().map(obj -> (Actor)obj).forEach(obj -> obj.draw(batch,0));
+        obstacles.stream().map(obj -> (Actor)obj).forEach(obj -> {obj.draw(batch,0);});
     }
 
     private void drawPlayer(Batch batch) {
@@ -133,14 +135,17 @@ public class PuzzleMapScreen extends Actor {
      * @param obstacle an obstacle
      * @return
      */
-    private boolean touchAndCanMoveTo(Obstacle obstacle) {
+    public boolean touchAndCanMoveTo(Obstacle obstacle) {
         boolean canMoveThrough = obstacle.touch(player.getX(), player.getY(), player.getDirection());
         return canMoveThrough;
     }
 
-    private Obstacle getObstacleAt(float x, float y) {
-        return obstacles.stream().filter(obj -> obj.checkBounds(x,y)).findFirst().orElseGet(() -> Obstacle.EMPTY);
+    public Obstacle getObstacleAt(float x, float y) {
+        return getObstacleAt(x,y,null);
+    }
 
+    public Obstacle getObstacleAt(float x, float y, Obstacle ignore) {
+        return obstacles.stream().filter(obj -> {return obj.checkBounds(x,y) && obj != ignore;} ).findFirst().orElseGet(() -> Obstacle.EMPTY);
     }
 
 
