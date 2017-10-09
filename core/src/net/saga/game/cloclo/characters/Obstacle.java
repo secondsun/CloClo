@@ -1,11 +1,25 @@
 package net.saga.game.cloclo.characters;
 
-public interface Obstacle {
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public abstract class Obstacle extends Actor {
 
     public static Obstacle EMPTY = new Obstacle() {
         @Override
         public boolean touch(float x, float y, Direction direction) {
             return true;
+        }
+
+        @Override
+        public boolean checkBounds(float x, float y) {
+            return false;
+        }
+    };
+
+    public static Obstacle BOUNDARY = new Obstacle() {
+        @Override
+        public boolean touch(float x, float y, Direction direction) {
+            return false;
         }
 
         @Override
@@ -25,7 +39,7 @@ public interface Obstacle {
      * @param direction A direction vector of the touch.  UP = 0,1, LEFT = -1,0, etc.
      * @return if a player can move into space (x ,y) + direction
      */
-    boolean touch(float x, float y, Direction direction);
+    public abstract boolean touch(float x, float y, Direction direction);
 
     /**
      * Return true if x,y within Obstacle
@@ -33,5 +47,6 @@ public interface Obstacle {
      * @param y y point
      * @return true if x,y within obstacle (inclusive)
      */
-    boolean checkBounds(float x, float y);
+    public abstract boolean checkBounds(float x, float y);
+
 }

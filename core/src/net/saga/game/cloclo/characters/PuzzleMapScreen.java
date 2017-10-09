@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import net.saga.game.cloclo.characters.obstacle.EmeraldBlock;
 import net.saga.game.cloclo.characters.obstacle.Tree;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
@@ -44,9 +45,9 @@ public class PuzzleMapScreen extends Actor {
     private void loadObstacles(Texture spritesheet) {
         for (int i = 2; i < 8; i++) {
             for (int j = 2; j < 8; j++) {
-                if (i%3 == 1 && j%3 == 1) {
-                    obstacles.add(new Tree(spritesheet, i * 16, j*16));
-                    obstacles.add(new EmeraldBlock(spritesheet, (1+i) * 16, j*16, this));
+                if (i % 3 == 1 && j % 3 == 1) {
+                    obstacles.add(new Tree(spritesheet, i * 16, j * 16));
+                    obstacles.add(new EmeraldBlock(spritesheet, (1 + i) * 16, j * 16, this));
                 }
             }
         }
@@ -62,7 +63,9 @@ public class PuzzleMapScreen extends Actor {
     }
 
     private void drawObstacles(Batch batch) {
-        obstacles.stream().map(obj -> (Actor)obj).forEach(obj -> {obj.draw(batch,0);});
+        obstacles.stream().map(obj -> (Actor) obj).forEach(obj -> {
+            obj.draw(batch, 0);
+        });
     }
 
     private void drawPlayer(Batch batch) {
@@ -86,46 +89,67 @@ public class PuzzleMapScreen extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        //check Player Collisions
-        if (player.isWalking()) {
-            float playerX = player.getX();
-            float playerY = player.getY();
+        if (player.isWalking() && player.getActions().size == 0) {
+            PlayerMoveByAction action;
             switch (player.getDirection()) {
                 case UP:
-                    if (playerY < 176) {
-                        Obstacle obstacle = getObstacleAt(playerX, playerY + 1);
-                        if (touchAndCanMoveTo(obstacle)) {
-                            player.setY(playerY + 1);
-                        }
+                    if (touchAndCanMoveTo(getObstacleAt(player.getX(), player.getY() + 8))) {
+                        action = new PlayerMoveByAction(this);
+                        action.setAmount(0, 8);
+                        player.addAction(action);
                     }
                     break;
                 case DOWN:
-                    if (playerY > 16) {
-                        Obstacle obstacle = getObstacleAt(playerX, playerY - 1);
-                        if (touchAndCanMoveTo(obstacle)) {
-                            player.setY(player.getY() - 1);
-                        }
+                    if (touchAndCanMoveTo(getObstacleAt(player.getX(), player.getY() - 8))) {
+                        action = new PlayerMoveByAction(this);
+                        action.setAmount(0, -8);
+                        player.addAction(action);
                     }
-
                     break;
                 case LEFT:
-                    if (playerX > 16) {
-                        Obstacle obstacle = getObstacleAt(playerX - 1, playerY);
-                        if (touchAndCanMoveTo(obstacle)) {
-                            player.setX(player.getX() - 1);
-                        }
+                    if (touchAndCanMoveTo(getObstacleAt(player.getX() - 8, player.getY()))) {
+                        action = new PlayerMoveByAction(this);
+                        action.setAmount(-8, 0);
+                        player.addAction(action);
                     }
                     break;
                 case RIGHT:
-                    if (playerX < 176) {
-                        Obstacle obstacle = getObstacleAt(playerX + 1, playerY);
-                        if (touchAndCanMoveTo(obstacle)) {
-                            player.setX(player.getX() + 1);
-                        }
+                    if (touchAndCanMoveTo(getObstacleAt(player.getX() + 8, player.getY()))) {
+                        action = new PlayerMoveByAction(this);
+                        action.setAmount(8, 0);
+                        player.addAction(action);
+
                     }
                     break;
+
             }
         }
+        player.act(delta);
+        obstacles.forEach(obstacle -> {
+            if (obstacle instanceof Actor) {
+                ((Actor) obstacle).act(delta);
+            }
+        });
+    }
+
+    /**
+     * Ejects things from walls, things from things, etc
+     */
+    private void ejectionCleanup() {
+
+
+        obstacles.forEach(obstacle -> {
+            Actor actor = obstacle;
+            if (getObstacleAt(actor.getX(), actor.getY(), obstacle) != Obstacle.EMPTY) {
+                actor.setX(round(actor.getX(), 8));
+                actor.setY(round(actor.getY(), 8));
+            }
+        });
+
+    }
+
+    public float round(float x, int i) {
+        return i * (Math.round(x / i));
     }
 
     /**
@@ -141,11 +165,27 @@ public class PuzzleMapScreen extends Actor {
     }
 
     public Obstacle getObstacleAt(float x, float y) {
-        return getObstacleAt(x,y,null);
+        return getObstacleAt(x, y, null);
     }
 
+    /**
+     * TODO : When you are pushing an object into objects that can be pushed sometimes you can pass through
+     * them because the player is aligned with multiple objects in a line and only one has its bounds checked.
+     *
+     * @param x      x position
+     * @param y      y position
+     * @param ignore an object to ignore.  Used when obstacles are getting obstacles for themselves.
+     * @return an obstacle or EMPTY
+     */
     public Obstacle getObstacleAt(float x, float y, Obstacle ignore) {
-        return obstacles.stream().filter(obj -> {return obj.checkBounds(x,y) && obj != ignore;} ).findFirst().orElseGet(() -> Obstacle.EMPTY);
+
+        if (x < 16 || x > 176 || y < 16 || y > 176) {
+            return Obstacle.BOUNDARY;
+        }
+
+        return obstacles.stream().filter(obj -> {
+            return obj.checkBounds(x, y) && obj != ignore;
+        }).findFirst().orElseGet(() -> Obstacle.EMPTY);
     }
 
 

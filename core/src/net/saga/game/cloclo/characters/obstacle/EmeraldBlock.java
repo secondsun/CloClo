@@ -12,12 +12,13 @@ import net.saga.game.cloclo.characters.PuzzleMapScreen;
 /**
  * EmeraldBlocks are opaque blocks that the Player can push.
  */
-public class EmeraldBlock extends Actor implements Obstacle {
+public class EmeraldBlock extends Obstacle {
 
     private final TextureRegion treeTexture;
     private final PuzzleMapScreen puzzleMapScreen;
 
     public EmeraldBlock(Texture spriteSheet, int i, int j, PuzzleMapScreen puzzleMapScreen) {
+        super();
         this.treeTexture = new TextureRegion(spriteSheet, 176, 233, 16, 16);
         setX(i);
         setY(j);
@@ -26,51 +27,60 @@ public class EmeraldBlock extends Actor implements Obstacle {
         this.puzzleMapScreen = puzzleMapScreen;
     }
 
+
+
     @Override
     public boolean touch(float playerX, float playerY, Direction direction) {
         switch (direction) {
             case UP:
-                if (playerY < 160) {
-                    if (puzzleMapScreen.getObstacleAt(getX(), getY() + 1, this) == Obstacle.EMPTY) {
-                        setY(getY() + 1);
-                        return true;
-                    } else {
-                        return false;
+                if (puzzleMapScreen.getObstacleAt(getX(), getY() + 1, this) == Obstacle.EMPTY) {
+                    if (getActions().size == 0 && playerY < 160) {
+                        EmeraldBlockMoveBy action = new EmeraldBlockMoveBy(puzzleMapScreen);
+                        action.setAmount(0, 8);
+                        addAction(action);
                     }
+                    return true;
+                } else {
+                    return false;
                 }
-                break;
+
             case DOWN:
-                if (playerY > 32) {
-                    if (puzzleMapScreen.getObstacleAt(getX(), getY() - 1, this) == Obstacle.EMPTY) {
-                        setY(getY() - 1);
-                        return true;
-                    } else {
-                        return false;
+                if (puzzleMapScreen.getObstacleAt(getX(), getY() - 1, this) == Obstacle.EMPTY) {
+                    if (getActions().size == 0 && playerY > 32) {
+                        EmeraldBlockMoveBy action = new EmeraldBlockMoveBy(puzzleMapScreen);
+                        action.setAmount(0, -8);
+                        addAction(action);
                     }
-
+                    return true;
+                } else {
+                    return false;
                 }
 
-                break;
+
             case LEFT:
-                if (playerX > 32) {
-                    if (puzzleMapScreen.getObstacleAt(getX() - 1, getY(), this) == Obstacle.EMPTY) {
-                        setX(getX() - 1);
-                        return true;
-                    } else {
-                        return false;
+                if (puzzleMapScreen.getObstacleAt(getX() - 1, getY(), this) == Obstacle.EMPTY) {
+                    if (getActions().size == 0 && playerX > 32) {
+                        EmeraldBlockMoveBy action = new EmeraldBlockMoveBy(puzzleMapScreen);
+                        action.setAmount(-8, 0);
+                        addAction(action);
                     }
+                    return true;
+                } else {
+                    return false;
                 }
-                break;
+
             case RIGHT:
-                if (playerX < 160) {
-                    if (puzzleMapScreen.getObstacleAt(getX() + 1, getY(), this) == Obstacle.EMPTY) {
-                        setX(getX() + 1);
-                        return true;
-                    } else {
-                        return false;
+                if (puzzleMapScreen.getObstacleAt(getX() + 1, getY(), this) == Obstacle.EMPTY) {
+                    if (getActions().size == 0 && playerX < 160) {
+                        EmeraldBlockMoveBy action = new EmeraldBlockMoveBy(puzzleMapScreen);
+                        action.setAmount(8, 0);
+                        addAction(action);
                     }
+                    return true;
+                } else {
+                    return false;
                 }
-                break;
+
         }
         return false;
     }

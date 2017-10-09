@@ -12,7 +12,7 @@ import net.saga.game.cloclo.characters.Obstacle;
  * A tree is an non interactable object that does not move, prevents the player from moving through it,
  * but does not obstruct sight.
  */
-public class Tree extends Actor implements Obstacle {
+public class Tree extends Obstacle {
 
     private final TextureRegion treeTexture;
 
