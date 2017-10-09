@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import net.saga.game.cloclo.characters.obstacle.EmeraldBlock;
-import net.saga.game.cloclo.characters.obstacle.Tree;
+import net.saga.game.cloclo.characters.obstacle.*;
+import net.saga.game.cloclo.characters.obstacle.Obstacle;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class PuzzleMapScreen extends Actor {
     private final TextureRegion frame;
     private final TextureRegion floorTile;
     private final Player player;
-    private final List<Obstacle> obstacles = new ArrayList<>(100);
+    private final List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacles = new ArrayList<>(100);
 
     public PuzzleMapScreen(Texture spritesheet) {
         frame = new TextureRegion(spritesheet, 128, 0, 208, 216);
@@ -49,6 +48,7 @@ public class PuzzleMapScreen extends Actor {
                 if (i % 3 == 1 && j % 3 == 1) {
                     obstacles.add(new Tree(spritesheet, i * 16, j * 16));
                     obstacles.add(new EmeraldBlock(spritesheet, (1 + i) * 16, j * 16, this));
+                    obstacles.add(new HeartFrame(spritesheet, (i) * 16, (j+1) * 16, this));
                 }
             }
         }
@@ -59,8 +59,8 @@ public class PuzzleMapScreen extends Actor {
         super.draw(batch, parentAlpha);
         drawFloor(batch);
         drawFrame(batch);
-        drawPlayer(batch);
         drawObstacles(batch);
+        drawPlayer(batch);
     }
 
     private void drawObstacles(Batch batch) {
@@ -141,7 +141,7 @@ public class PuzzleMapScreen extends Actor {
 
         obstacles.forEach(obstacle -> {
             Actor actor = obstacle;
-            if (getObstacleAt(actor.getX(), actor.getY(), obstacle) != Obstacle.EMPTY) {
+            if (getObstacleAt(actor.getX(), actor.getY(), obstacle) != net.saga.game.cloclo.characters.obstacle.Obstacle.EMPTY) {
                 actor.setX(round(actor.getX(), 8));
                 actor.setY(round(actor.getY(), 8));
             }
@@ -160,12 +160,12 @@ public class PuzzleMapScreen extends Actor {
      * @param obstacle an obstacle
      * @return
      */
-    public boolean touchAndCanMoveTo(Obstacle obstacle) {
+    public boolean touchAndCanMoveTo(net.saga.game.cloclo.characters.obstacle.Obstacle obstacle) {
         boolean canMoveThrough = obstacle.touch(player.getX(), player.getY(), player.getDirection());
         return canMoveThrough;
     }
 
-    public Obstacle getObstacleAt(float x, float y) {
+    public net.saga.game.cloclo.characters.obstacle.Obstacle getObstacleAt(float x, float y) {
         return getObstacleAt(x, y, null);
     }
 
@@ -178,23 +178,24 @@ public class PuzzleMapScreen extends Actor {
      * @param ignore an object to ignore.  Used when obstacles are getting obstacles for themselves.
      * @return an obstacle or EMPTY
      */
-    public Obstacle getObstacleAt(float x, float y, Obstacle ignore) {
+    public net.saga.game.cloclo.characters.obstacle.Obstacle getObstacleAt(float x, float y, net.saga.game.cloclo.characters.obstacle.Obstacle ignore) {
 
         if (x < 16 || x > 176 || y < 16 || y > 176) {
-            return Obstacle.BOUNDARY;
+            return net.saga.game.cloclo.characters.obstacle.Obstacle.BOUNDARY;
         }
 
-        List<Obstacle> obstacleList = obstacles.stream().filter(obj -> {
+        List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacleList = obstacles.stream().filter(obj -> {
             return obj.checkBounds(x, y) && obj != ignore;
         }).collect(Collectors.toList());
 
         switch (obstacleList.size()) {
             case 0:
-                return Obstacle.EMPTY;
+                return net.saga.game.cloclo.characters.obstacle.Obstacle.EMPTY;
             case 1:
                 return obstacleList.get(0);
             default:
-                return Obstacle.BOUNDARY;
+                return new ObstacleTuple(obstacleList, this);
+
         }
 
 
@@ -211,4 +212,20 @@ public class PuzzleMapScreen extends Actor {
         });
     }
 
+    public void collectItem(HeartFrame heartFrame) {
+        if (Math.abs(player.getX() - heartFrame.getX()) < 4 && Math.abs(player.getY() - heartFrame.getY()) < 4) {
+            obstacles.remove(heartFrame);
+            if (allHeartsCollected()) {
+                triggerGateOpen();
+            }
+        }
+    }
+
+    private void triggerGateOpen() {
+        System.out.println("Gate open");
+    }
+
+    private boolean allHeartsCollected() {
+        return obstacles.stream().noneMatch(obj -> obj instanceof HeartFrame);
+    }
 }

@@ -1,6 +1,8 @@
 package net.saga.game.cloclo.characters;
 
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import net.saga.game.cloclo.characters.obstacle.HeartFrame;
+import net.saga.game.cloclo.characters.obstacle.Obstacle;
 
 public class PlayerMoveByAction extends MoveByAction {
 
@@ -16,9 +18,8 @@ public class PlayerMoveByAction extends MoveByAction {
     protected void updateRelative (float percentDelta) {
         int newX = (int) Math.floor(target.getX() + getAmountX()* percentDelta +.0001);
         int newY = (int) Math.floor(target.getY() + getAmountY()* percentDelta +.0001);
-        Obstacle obstacle = screen.getObstacleAt(newX, newY);
 
-        if (/*screen.touchAndCanMoveTo(obstacle) &&*/ (newX <= 176 && newX >= 16 && newY >= 16 && newY <= 176) ) {
+        if ((newX <= 176 && newX >= 16 && newY >= 16 && newY <= 176) ) {
             target.moveBy(getAmountX() * percentDelta, getAmountY() * percentDelta);
         } else {
             finish();
@@ -30,5 +31,9 @@ public class PlayerMoveByAction extends MoveByAction {
     protected void end() {
         target.setX(screen.round(target.getX(), 8));
         target.setY(screen.round(target.getY(), 8));
+        Obstacle obstacle = screen.getObstacleAt(target.getX(), target.getY());
+        if (obstacle instanceof HeartFrame) {
+            screen.collectItem((HeartFrame) obstacle);
+        }
     }
 }

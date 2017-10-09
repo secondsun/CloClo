@@ -1,6 +1,9 @@
-package net.saga.game.cloclo.characters;
+package net.saga.game.cloclo.characters.obstacle;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import net.saga.game.cloclo.characters.Direction;
+
+import static net.saga.game.cloclo.characters.obstacle.Characteristic.PASSABLE;
 
 public abstract class Obstacle extends Actor {
 
@@ -14,6 +17,11 @@ public abstract class Obstacle extends Actor {
         public boolean checkBounds(float x, float y) {
             return false;
         }
+
+        @Override
+        public boolean hasCharacteristic(Characteristic characteristic) {
+            return PASSABLE.equals(characteristic);
+        }
     };
 
     public static Obstacle BOUNDARY = new Obstacle() {
@@ -24,6 +32,11 @@ public abstract class Obstacle extends Actor {
 
         @Override
         public boolean checkBounds(float x, float y) {
+            return false;
+        }
+
+        @Override
+        public boolean hasCharacteristic(Characteristic characteristic) {
             return false;
         }
     };
@@ -48,5 +61,7 @@ public abstract class Obstacle extends Actor {
      * @return true if x,y within obstacle (inclusive)
      */
     public abstract boolean checkBounds(float x, float y);
+
+    public abstract boolean hasCharacteristic(Characteristic characteristic);
 
 }

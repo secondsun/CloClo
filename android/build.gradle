@@ -1,7 +1,7 @@
 android {
     buildToolsVersion "26.0.2"
     compileSdkVersion 26
-    minSdkVersion 25
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -20,7 +20,7 @@ android {
     }
     defaultConfig {
         applicationId "net.saga.game.cloclo"
-        minSdkVersion 9
+        minSdkVersion 25
         targetSdkVersion 26
     }
 }

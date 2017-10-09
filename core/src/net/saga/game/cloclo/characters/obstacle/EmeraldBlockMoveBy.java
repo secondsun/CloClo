@@ -1,7 +1,6 @@
 package net.saga.game.cloclo.characters.obstacle;
 
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import net.saga.game.cloclo.characters.Obstacle;
 import net.saga.game.cloclo.characters.PuzzleMapScreen;
 
 public class EmeraldBlockMoveBy  extends MoveByAction {
