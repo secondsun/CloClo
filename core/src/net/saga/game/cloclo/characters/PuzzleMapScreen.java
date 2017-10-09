@@ -6,7 +6,9 @@ import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import net.saga.game.cloclo.characters.obstacle.*;
 import net.saga.game.cloclo.characters.obstacle.Obstacle;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
@@ -14,6 +16,8 @@ import net.saga.game.farfar.util.abstraction.OnButtonDown;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static net.saga.game.cloclo.characters.Direction.DOWN;
 
 /**
  * This is a normal gameplay level.
@@ -30,14 +34,15 @@ public class PuzzleMapScreen extends Actor {
     private final TextureRegion floorTile;
     private final Player player;
     private final List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacles = new ArrayList<>(100);
-
+    private final Door door;
+    private boolean ended = false;
     public PuzzleMapScreen(Texture spritesheet) {
         frame = new TextureRegion(spritesheet, 128, 0, 208, 216);
         floorTile = new TextureRegion(spritesheet, 128, 217, 16, 16);
         this.player = new Boy(spritesheet);
         this.player.setX(16);
         this.player.setY(16);
-
+        this.door = new Door(spritesheet, 96,192, this);
         loadObstacles(spritesheet);
 
     }
@@ -52,6 +57,7 @@ public class PuzzleMapScreen extends Actor {
                 }
             }
         }
+        obstacles.add(door);
     }
 
     @Override
@@ -90,47 +96,72 @@ public class PuzzleMapScreen extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (player.isWalking() && player.getActions().size == 0) {
-            PlayerMoveByAction action;
-            switch (player.getDirection()) {
-                case UP:
-                    if (touchAndCanMoveTo(getObstacleAt(player.getX(), player.getY() + 8))) {
-                        action = new PlayerMoveByAction(this);
-                        action.setAmount(0, 8);
-                        player.addAction(action);
-                    }
-                    break;
-                case DOWN:
-                    if (touchAndCanMoveTo(getObstacleAt(player.getX(), player.getY() - 8))) {
-                        action = new PlayerMoveByAction(this);
-                        action.setAmount(0, -8);
-                        player.addAction(action);
-                    }
-                    break;
-                case LEFT:
-                    if (touchAndCanMoveTo(getObstacleAt(player.getX() - 8, player.getY()))) {
-                        action = new PlayerMoveByAction(this);
-                        action.setAmount(-8, 0);
-                        player.addAction(action);
-                    }
-                    break;
-                case RIGHT:
-                    if (touchAndCanMoveTo(getObstacleAt(player.getX() + 8, player.getY()))) {
-                        action = new PlayerMoveByAction(this);
-                        action.setAmount(8, 0);
-                        player.addAction(action);
+        if (!ended) {
+            if (player.isWalking() && player.getActions().size == 0) {
+                PlayerMoveByAction action;
+                Obstacle obstacle;
+                switch (player.getDirection()) {
+                    case UP:
+                        obstacle = getObstacleAt(player.getX(), player.getY() + 8);
+                        if (touchAndCanMoveTo(obstacle)) {
+                            if (obstacle != door) {
+                                action = new PlayerMoveByAction(this);
+                                action.setAmount(0, 8);
+                                player.addAction(action);
+                            } else {
+                                player.setX(door.getX());
+                                player.setY(door.getY());
+                                endLevel();
+                            }
+                        }
+                        break;
+                    case DOWN:
+                        if (touchAndCanMoveTo(getObstacleAt(player.getX(), player.getY() - 8))) {
+                            action = new PlayerMoveByAction(this);
+                            action.setAmount(0, -8);
+                            player.addAction(action);
+                        }
+                        break;
+                    case LEFT:
+                        if (touchAndCanMoveTo(getObstacleAt(player.getX() - 8, player.getY()))) {
+                            action = new PlayerMoveByAction(this);
+                            action.setAmount(-8, 0);
+                            player.addAction(action);
+                        }
+                        break;
+                    case RIGHT:
+                        if (touchAndCanMoveTo(getObstacleAt(player.getX() + 8, player.getY()))) {
+                            action = new PlayerMoveByAction(this);
+                            action.setAmount(8, 0);
+                            player.addAction(action);
 
-                    }
-                    break;
+                        }
+                        break;
 
+                }
             }
+            player.act(delta);
+            obstacles.forEach(obstacle -> {
+                if (obstacle instanceof Actor) {
+                    ((Actor) obstacle).act(delta);
+                }
+            });
+        } else {
+            player.unregisterAsControllerListener();
         }
-        player.act(delta);
-        obstacles.forEach(obstacle -> {
-            if (obstacle instanceof Actor) {
-                ((Actor) obstacle).act(delta);
+    }
+
+    private void endLevel() {
+        ended = true;
+        player.setDirection(DOWN);
+        player.animateVictory();
+        addAction(Actions.sequence(Actions.fadeOut(5), new Action() {
+            @Override
+            public boolean act(float delta) {
+                Gdx.app.exit();
+                return true;
             }
-        });
+        }));
     }
 
     /**
@@ -181,7 +212,9 @@ public class PuzzleMapScreen extends Actor {
     public net.saga.game.cloclo.characters.obstacle.Obstacle getObstacleAt(float x, float y, net.saga.game.cloclo.characters.obstacle.Obstacle ignore) {
 
         if (x < 16 || x > 176 || y < 16 || y > 176) {
-            return net.saga.game.cloclo.characters.obstacle.Obstacle.BOUNDARY;
+            if (!door.checkBounds(x,y)) {
+                return net.saga.game.cloclo.characters.obstacle.Obstacle.BOUNDARY;
+            }
         }
 
         List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacleList = obstacles.stream().filter(obj -> {
@@ -204,6 +237,7 @@ public class PuzzleMapScreen extends Actor {
 
     public void addControllerListeners(Controller controller) {
         controller.addListener(player);
+        player.setController(controller);
         controller.addListener((OnButtonDown) (Controller controller1, int buttonCode) -> {
             if (buttonCode == Xbox.BACK) {
                 Gdx.app.exit();
@@ -222,7 +256,7 @@ public class PuzzleMapScreen extends Actor {
     }
 
     private void triggerGateOpen() {
-        System.out.println("Gate open");
+        door.open();
     }
 
     private boolean allHeartsCollected() {

@@ -86,13 +86,6 @@ public class EmeraldBlock extends Obstacle {
     }
 
     @Override
-    public boolean checkBounds(float x, float y) {
-        Rectangle treeRect = new Rectangle(getX(), getY(), 16, 16);
-        Rectangle playerRectangle = new Rectangle(x, y, 16, 16);
-        return playerRectangle.overlaps(treeRect);
-    }
-
-    @Override
     public boolean hasCharacteristic(Characteristic characteristic) {
         return PUSHABLE.equals(characteristic);
     }

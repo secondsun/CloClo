@@ -21,35 +21,45 @@ public abstract class Player extends Actor implements ControllerListener {
     private Direction direction = DOWN;
     private boolean walking = false;
     private float stateTime = 0;
+    private Controller controller;
 
+    private final Animation<TextureRegion> victoryAnimation;
     private final Map<Direction, Animation<TextureRegion>> directionAnimationMap;
+    private boolean victory = false;
 
 
     Player(Texture spriteSheet) {
         this.spriteSheet = spriteSheet;
         directionAnimationMap = buildeWalkingMap();
+        victoryAnimation = buildVictoryAnimation();
     }
 
+    protected abstract Animation<TextureRegion> buildVictoryAnimation();
 
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (walking) {
+        if (walking || victory) {
             stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         }
         // Get current frame of animation for the current stateTime
-        TextureRegion currentFrame = directionAnimationMap.get(direction).getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, super.getX(), getY());
+        if (!victory) {
+            TextureRegion currentFrame = directionAnimationMap.get(direction).getKeyFrame(stateTime, true);
+            batch.draw(currentFrame, super.getX(), getY());
+        } else {
+            TextureRegion currentFrame = victoryAnimation.getKeyFrame(stateTime, true);
+            batch.draw(currentFrame, super.getX(), getY());
+        }
     }
 
     @Override
     public void connected(Controller controller) {
-
+        controller.addListener(this);
     }
 
     @Override
     public void disconnected(Controller controller) {
-
+        controller.removeListener(this);
     }
 
     @Override
@@ -66,7 +76,6 @@ public abstract class Player extends Actor implements ControllerListener {
     private void resetWalk() {
         stateTime = 0;
         walking = false;
-
     }
 
     @Override
@@ -137,5 +146,26 @@ public abstract class Player extends Actor implements ControllerListener {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public void animateVictory() {
+        resetWalk();
+        victory = true;
+    }
+
+    public void unregisterAsControllerListener() {
+        controller.removeListener(this);
     }
 }

@@ -28,6 +28,24 @@ public class Boy extends Player {
     }
 
     @Override
+    protected Animation<TextureRegion> buildVictoryAnimation() {
+        TextureRegion[][] tmp = TextureRegion.split(spriteSheet,
+                spriteSheet.getWidth() / FRAME_COLS,
+                spriteSheet.getHeight() / FRAME_ROWS);
+
+        Animation<TextureRegion> animation; // Must declare frame type (TextureRegion)
+        TextureRegion[] frames = new TextureRegion[2];
+
+        int index = 0;
+        for (int j = 0; j < 2; j++) {
+            frames[index++] = tmp[4][j];
+        }
+        animation = new Animation<TextureRegion>(0.150f, frames);
+
+        return animation;
+    }
+
+    @Override
     protected Map<Direction, Animation<TextureRegion>> buildeWalkingMap() {
         // Use the split utility method to create a 2D array of TextureRegions. This is
         // possible because this sprite sheet contains frames of equal size and they are

@@ -1,5 +1,6 @@
 package net.saga.game.cloclo.characters.obstacle;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import net.saga.game.cloclo.characters.Direction;
 
@@ -60,7 +61,12 @@ public abstract class Obstacle extends Actor {
      * @param y y point
      * @return true if x,y within obstacle (inclusive)
      */
-    public abstract boolean checkBounds(float x, float y);
+    public boolean checkBounds(float x, float y) {
+        Rectangle treeRect = new Rectangle(getX(), getY(), 16, 16);
+        Rectangle playerRectangle = new Rectangle(x, y, 16, 16);
+        return playerRectangle.overlaps(treeRect);
+    }
+
 
     public abstract boolean hasCharacteristic(Characteristic characteristic);
 
