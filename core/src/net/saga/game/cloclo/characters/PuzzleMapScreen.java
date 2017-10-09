@@ -14,6 +14,7 @@ import net.saga.game.farfar.util.abstraction.OnButtonDown;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is a normal gameplay level.
@@ -183,9 +184,20 @@ public class PuzzleMapScreen extends Actor {
             return Obstacle.BOUNDARY;
         }
 
-        return obstacles.stream().filter(obj -> {
+        List<Obstacle> obstacleList = obstacles.stream().filter(obj -> {
             return obj.checkBounds(x, y) && obj != ignore;
-        }).findFirst().orElseGet(() -> Obstacle.EMPTY);
+        }).collect(Collectors.toList());
+
+        switch (obstacleList.size()) {
+            case 0:
+                return Obstacle.EMPTY;
+            case 1:
+                return obstacleList.get(0);
+            default:
+                return Obstacle.BOUNDARY;
+        }
+
+
     }
 
 
