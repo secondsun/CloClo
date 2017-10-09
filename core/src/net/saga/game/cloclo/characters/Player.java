@@ -85,40 +85,40 @@ public abstract class Player extends Actor implements ControllerListener {
 
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
-        switch (value) {
 
-            case center:
-                resetWalk();
-                break;
-            case north:
-                resetWalk();
-                walking = true;
-                direction = UP;
-                break;
-            case south:
-                resetWalk();
-                walking = true;
-                direction = DOWN;
-                break;
-            case east:
-                resetWalk();
-                walking = true;
-                direction = RIGHT;
-                break;
-            case west:
-                resetWalk();
-                walking = true;
-                direction = LEFT;
-                break;
-            case northEast:
-                break;
-            case southEast:
-                break;
-            case northWest:
-                break;
-            case southWest:
-                break;
-        }
+            switch (value) {
+                case center:
+                    resetWalk();
+                    break;
+                case north:
+                    resetWalk();
+                    walking = true;
+                    direction = UP;
+                    break;
+                case south:
+                    resetWalk();
+                    walking = true;
+                    direction = DOWN;
+                    break;
+                case east:
+                    resetWalk();
+                    walking = true;
+                    direction = RIGHT;
+                    break;
+                case west:
+                    resetWalk();
+                    walking = true;
+                    direction = LEFT;
+                    break;
+                case northEast:
+                    break;
+                case southEast:
+                    break;
+                case northWest:
+                    break;
+                case southWest:
+                    break;
+            }
         return false;
     }
 
@@ -138,7 +138,7 @@ public abstract class Player extends Actor implements ControllerListener {
     }
 
 
-    protected abstract Map<Direction,Animation<TextureRegion>> buildeWalkingMap();
+    protected abstract Map<Direction, Animation<TextureRegion>> buildeWalkingMap();
 
     public boolean isWalking() {
         return walking;

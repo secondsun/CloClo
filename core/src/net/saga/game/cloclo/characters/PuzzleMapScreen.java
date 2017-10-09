@@ -53,10 +53,11 @@ public class PuzzleMapScreen extends Actor {
                 if (i % 3 == 1 && j % 3 == 1) {
                     obstacles.add(new Tree(spritesheet, i * 16, j * 16));
                     obstacles.add(new EmeraldBlock(spritesheet, (1 + i) * 16, j * 16, this));
-                    obstacles.add(new HeartFrame(spritesheet, (i) * 16, (j+1) * 16, this));
+
                 }
             }
         }
+        obstacles.add(new HeartFrame(spritesheet,96,174, this));
         obstacles.add(door);
     }
 
@@ -109,9 +110,14 @@ public class PuzzleMapScreen extends Actor {
                                 action.setAmount(0, 8);
                                 player.addAction(action);
                             } else {
-                                player.setX(door.getX());
-                                player.setY(door.getY());
-                                endLevel();
+                                player.addAction(Actions.sequence(Actions.moveTo(door.getX(), door.getY(), 0.25f), new Action() {
+                                    @Override
+                                    public boolean act(float delta) {
+                                        endLevel();
+                                        return true;
+                                    }
+                                }));
+
                             }
                         }
                         break;
@@ -212,7 +218,7 @@ public class PuzzleMapScreen extends Actor {
     public net.saga.game.cloclo.characters.obstacle.Obstacle getObstacleAt(float x, float y, net.saga.game.cloclo.characters.obstacle.Obstacle ignore) {
 
         if (x < 16 || x > 176 || y < 16 || y > 176) {
-            if (!door.checkBounds(x,y)) {
+            if (!door.checkBounds(x,y) || door.getX() != player.getX()) {
                 return net.saga.game.cloclo.characters.obstacle.Obstacle.BOUNDARY;
             }
         }
