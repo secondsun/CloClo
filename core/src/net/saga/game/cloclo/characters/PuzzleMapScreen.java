@@ -11,13 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import net.saga.game.cloclo.characters.obstacle.*;
 import net.saga.game.cloclo.characters.obstacle.Obstacle;
+import net.saga.game.cloclo.control.KeyboardControlEventSource;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.saga.game.cloclo.characters.Direction.DOWN;
+import static net.saga.game.cloclo.characters.CloCloInputEvent.DOWN;
 
 /**
  * This is a normal gameplay level.
@@ -152,8 +153,6 @@ public class PuzzleMapScreen extends Actor {
                     ((Actor) obstacle).act(delta);
                 }
             });
-        } else {
-            player.unregisterAsControllerListener();
         }
     }
 
@@ -239,18 +238,18 @@ public class PuzzleMapScreen extends Actor {
 
 
     }
-
-
-    public void addControllerListeners(Controller controller) {
-        controller.addListener(player);
-        player.setController(controller);
-        controller.addListener((OnButtonDown) (Controller controller1, int buttonCode) -> {
-            if (buttonCode == Xbox.BACK) {
-                Gdx.app.exit();
-            }
-            return false;
-        });
-    }
+//
+//
+//    public void addControllerListeners(Controller controller) {
+//        controller.addListener(player);
+//        player.setController(controller);
+//        controller.addListener((OnButtonDown) (Controller controller1, int buttonCode) -> {
+//            if (buttonCode == Xbox.BACK) {
+//                Gdx.app.exit();
+//            }
+//            return false;
+//        });
+//    }
 
     public void collectItem(HeartFrame heartFrame) {
         if (Math.abs(player.getX() - heartFrame.getX()) < 4 && Math.abs(player.getY() - heartFrame.getY()) < 4) {
@@ -267,5 +266,9 @@ public class PuzzleMapScreen extends Actor {
 
     private boolean allHeartsCollected() {
         return obstacles.stream().noneMatch(obj -> obj instanceof HeartFrame);
+    }
+
+    public void addControlSource(KeyboardControlEventSource source) {
+        source.addHandler(player);
     }
 }

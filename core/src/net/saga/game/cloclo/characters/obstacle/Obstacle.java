@@ -2,7 +2,7 @@ package net.saga.game.cloclo.characters.obstacle;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import net.saga.game.cloclo.characters.Direction;
+import net.saga.game.cloclo.characters.CloCloInputEvent;
 
 import static net.saga.game.cloclo.characters.obstacle.Characteristic.PASSABLE;
 
@@ -10,7 +10,7 @@ public abstract class Obstacle extends Actor {
 
     public static Obstacle EMPTY = new Obstacle() {
         @Override
-        public boolean touch(float x, float y, Direction direction) {
+        public boolean touch(float x, float y, CloCloInputEvent direction) {
             return true;
         }
 
@@ -27,7 +27,7 @@ public abstract class Obstacle extends Actor {
 
     public static Obstacle BOUNDARY = new Obstacle() {
         @Override
-        public boolean touch(float x, float y, Direction direction) {
+        public boolean touch(float x, float y, CloCloInputEvent direction) {
             return false;
         }
 
@@ -53,7 +53,7 @@ public abstract class Obstacle extends Actor {
      * @param direction A direction vector of the touch.  UP = 0,1, LEFT = -1,0, etc.
      * @return if a player can move into space (x ,y) + direction
      */
-    public abstract boolean touch(float x, float y, Direction direction);
+    public abstract boolean touch(float x, float y, CloCloInputEvent direction);
 
     /**
      * Return true if x,y within Obstacle

@@ -3,7 +3,7 @@ package net.saga.game.cloclo.characters.obstacle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import net.saga.game.cloclo.characters.Direction;
+import net.saga.game.cloclo.characters.CloCloInputEvent;
 import net.saga.game.cloclo.characters.PuzzleMapScreen;
 
 import static net.saga.game.cloclo.characters.obstacle.Characteristic.PASSABLE;
@@ -24,7 +24,7 @@ public class Door extends Obstacle {
     }
 
     @Override
-    public boolean touch(float x, float y, Direction direction) {
+    public boolean touch(float x, float y, CloCloInputEvent direction) {
         return open;
     }
 

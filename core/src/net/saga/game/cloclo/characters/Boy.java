@@ -1,6 +1,5 @@
 package net.saga.game.cloclo.characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.saga.game.cloclo.characters.Direction.*;
+import static net.saga.game.cloclo.characters.CloCloInputEvent.*;
 
 /**
  * Class for the boy PC
@@ -46,7 +45,7 @@ public class Boy extends Player {
     }
 
     @Override
-    protected Map<Direction, Animation<TextureRegion>> buildeWalkingMap() {
+    protected Map<CloCloInputEvent, Animation<TextureRegion>> buildeWalkingMap() {
         // Use the split utility method to create a 2D array of TextureRegions. This is
         // possible because this sprite sheet contains frames of equal size and they are
         // all aligned.
@@ -58,7 +57,7 @@ public class Boy extends Player {
         // left, going across first. The Animation constructor requires a 1D array.
         TextureRegion[] walkFrames = new TextureRegion[8];
         int index;
-        Map<Direction, Animation<TextureRegion>> directionAnimationMap = new HashMap<>(4);
+        Map<CloCloInputEvent, Animation<TextureRegion>> directionAnimationMap = new HashMap<>(4);
         Animation<TextureRegion> walkAnimation; // Must declare frame type (TextureRegion)
 
         index = 0;

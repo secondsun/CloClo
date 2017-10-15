@@ -1,6 +1,6 @@
 package net.saga.game.cloclo.characters.obstacle;
 
-import net.saga.game.cloclo.characters.Direction;
+import net.saga.game.cloclo.characters.CloCloInputEvent;
 import net.saga.game.cloclo.characters.PuzzleMapScreen;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class ObstacleTuple extends Obstacle {
 
 
     @Override
-    public boolean touch(float x, float y, Direction direction) {
+    public boolean touch(float x, float y, CloCloInputEvent direction) {
         List<Obstacle> impassables = obstacles.stream()
                 .filter(obstacle -> !obstacle.hasCharacteristic(Characteristic.PASSABLE))
                 .collect(Collectors.toList());

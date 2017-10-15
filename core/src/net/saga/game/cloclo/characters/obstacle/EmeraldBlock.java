@@ -3,8 +3,7 @@ package net.saga.game.cloclo.characters.obstacle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import net.saga.game.cloclo.characters.Direction;
+import net.saga.game.cloclo.characters.CloCloInputEvent;
 import net.saga.game.cloclo.characters.PuzzleMapScreen;
 
 import static net.saga.game.cloclo.characters.obstacle.Characteristic.PUSHABLE;
@@ -30,7 +29,7 @@ public class EmeraldBlock extends Obstacle {
 
 
     @Override
-    public boolean touch(float playerX, float playerY, Direction direction) {
+    public boolean touch(float playerX, float playerY, CloCloInputEvent direction) {
         switch (direction) {
             case UP:
                 if (puzzleMapScreen.getObstacleAt(getX(), getY() + 1, this) == Obstacle.EMPTY) {

@@ -3,8 +3,7 @@ package net.saga.game.cloclo.characters.obstacle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import net.saga.game.cloclo.characters.Direction;
+import net.saga.game.cloclo.characters.CloCloInputEvent;
 
 /**
  * A tree is an non interactable object that does not move, prevents the player from moving through it,
@@ -23,7 +22,7 @@ public class Tree extends Obstacle {
     }
 
     @Override
-    public boolean touch(float x, float y, Direction direction) {
+    public boolean touch(float x, float y, CloCloInputEvent direction) {
         return false;
     }
 

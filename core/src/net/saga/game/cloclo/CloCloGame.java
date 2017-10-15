@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import net.saga.game.cloclo.characters.Boy;
 import net.saga.game.cloclo.characters.PuzzleMapScreen;
+import net.saga.game.cloclo.control.KeyboardControlEventSource;
 import net.saga.game.farfar.util.abstraction.OnButtonDown;
 import net.saga.game.farfar.util.controller.LoggingControllerListenerProxyUtil;
 import net.saga.game.farfar.util.player.PlayerController;
@@ -27,7 +28,6 @@ public class CloCloGame extends ApplicationAdapter {
     public static final int WORLD_WIDTH = 320;
     public static final int WORLD_HEIGHT = 240;
 
-	Controller controller = null;
     private Stage stage;
     private Texture globalSheet;
     private PuzzleMapScreen mapScreen;
@@ -41,16 +41,20 @@ public class CloCloGame extends ApplicationAdapter {
         stage.addActor(mapScreen);
 
 
-        if (controller == null) {
-            controller = Controllers.getControllers().get(0);
-            if (controller == null) {
-                Gdx.app.error("TODO:", "Gracefull handle no controllers");
-                throw new RuntimeException("No Controller");
-            }
-            Gdx.app.debug("Controller", controller.getName());
-            mapScreen.addControllerListeners(controller);
-        }
-        
+//        if (controller == null) {
+//            controller = Controllers.getControllers().get(0);
+//            if (controller == null) {
+//                Gdx.app.error("TODO:", "Gracefull handle no controllers");
+//                throw new RuntimeException("No Controller");
+//            }
+//            Gdx.app.debug("Controller", controller.getName());
+//            mapScreen.addControllerListeners(controller);
+//        }
+//
+
+        KeyboardControlEventSource source = new KeyboardControlEventSource();
+        Gdx.input.setInputProcessor(source);
+        mapScreen.addControlSource(source);
 	}
 
 

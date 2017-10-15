@@ -10,21 +10,22 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import net.saga.game.cloclo.control.ControlEventHandler;
 
 import java.util.Map;
 
-import static net.saga.game.cloclo.characters.Direction.*;
+import static net.saga.game.cloclo.characters.CloCloInputEvent.*;
 
-public abstract class Player extends Actor implements ControllerListener {
+public abstract class Player extends Actor implements ControlEventHandler {
 
     protected final Texture spriteSheet;
-    private Direction direction = DOWN;
+    private CloCloInputEvent direction = DOWN;
     private boolean walking = false;
     private float stateTime = 0;
     private Controller controller;
 
     private final Animation<TextureRegion> victoryAnimation;
-    private final Map<Direction, Animation<TextureRegion>> directionAnimationMap;
+    private final Map<CloCloInputEvent, Animation<TextureRegion>> directionAnimationMap;
     private boolean victory = false;
 
 
@@ -53,102 +54,55 @@ public abstract class Player extends Actor implements ControllerListener {
     }
 
     @Override
-    public void connected(Controller controller) {
-        controller.addListener(this);
+    public boolean onEvent(CloCloInputEvent value) {
+
+            switch (value) {
+                case CENTER:
+                    resetWalk();
+                    break;
+                case UP:
+                    resetWalk();
+                    walking = true;
+                    direction = UP;
+                    break;
+                case DOWN:
+                    resetWalk();
+                    walking = true;
+                    direction = DOWN;
+                    break;
+                case RIGHT:
+                    resetWalk();
+                    walking = true;
+                    direction = RIGHT;
+                    break;
+                case LEFT:
+                    resetWalk();
+                    walking = true;
+                    direction = LEFT;
+                    break;
+
+            }
+        return true;
     }
 
-    @Override
-    public void disconnected(Controller controller) {
-        controller.removeListener(this);
-    }
 
-    @Override
-    public boolean buttonDown(Controller controller, int buttonCode) {
-
-        return false;
-    }
-
-    @Override
-    public boolean buttonUp(Controller controller, int buttonCode) {
-        return false;
-    }
 
     private void resetWalk() {
         stateTime = 0;
         walking = false;
     }
 
-    @Override
-    public boolean axisMoved(Controller controller, int axisCode, float value) {
-        return false;
-    }
-
-    @Override
-    public boolean povMoved(Controller controller, int povCode, PovDirection value) {
-
-            switch (value) {
-                case center:
-                    resetWalk();
-                    break;
-                case north:
-                    resetWalk();
-                    walking = true;
-                    direction = UP;
-                    break;
-                case south:
-                    resetWalk();
-                    walking = true;
-                    direction = DOWN;
-                    break;
-                case east:
-                    resetWalk();
-                    walking = true;
-                    direction = RIGHT;
-                    break;
-                case west:
-                    resetWalk();
-                    walking = true;
-                    direction = LEFT;
-                    break;
-                case northEast:
-                    break;
-                case southEast:
-                    break;
-                case northWest:
-                    break;
-                case southWest:
-                    break;
-            }
-        return false;
-    }
-
-    @Override
-    public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
-        return false;
-    }
-
-    @Override
-    public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
-        return false;
-    }
-
-    @Override
-    public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
-        return false;
-    }
-
-
-    protected abstract Map<Direction, Animation<TextureRegion>> buildeWalkingMap();
+    protected abstract Map<CloCloInputEvent, Animation<TextureRegion>> buildeWalkingMap();
 
     public boolean isWalking() {
         return walking;
     }
 
-    public Direction getDirection() {
+    public CloCloInputEvent getDirection() {
         return direction;
     }
 
-    public void setDirection(Direction direction) {
+    public void setDirection(CloCloInputEvent direction) {
         this.direction = direction;
     }
 
@@ -165,7 +119,4 @@ public abstract class Player extends Actor implements ControllerListener {
         victory = true;
     }
 
-    public void unregisterAsControllerListener() {
-        controller.removeListener(this);
-    }
 }
