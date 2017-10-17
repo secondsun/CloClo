@@ -9,10 +9,10 @@ public class PlayerMoveByAction extends MoveByAction {
     private final PuzzleMapScreen screen;
 
 
-    public PlayerMoveByAction(PuzzleMapScreen screen) {
+    public PlayerMoveByAction(PuzzleMapScreen screen, Player player) {
         this.screen = screen;
         setDuration( 1 / 8f);
-
+        player.setDisplayDirection(player.getDirection());
     }
 
     protected void updateRelative (float percentDelta) {
@@ -29,6 +29,7 @@ public class PlayerMoveByAction extends MoveByAction {
 
     @Override
     protected void end() {
+
         target.setX(screen.round(target.getX(), 8));
         target.setY(screen.round(target.getY(), 8));
         Obstacle obstacle = screen.getObstacleAt(target.getX(), target.getY());

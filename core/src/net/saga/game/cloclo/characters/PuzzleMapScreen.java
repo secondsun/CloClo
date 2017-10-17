@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.saga.game.cloclo.characters.CloCloInputEvent.DOWN;
+import static net.saga.game.cloclo.characters.CloCloInputEvent.UP;
 
 /**
  * This is a normal gameplay level.
@@ -58,7 +59,7 @@ public class PuzzleMapScreen extends Actor {
                 }
             }
         }
-        obstacles.add(new HeartFrame(spritesheet,96,174, this));
+        obstacles.add(new HeartFrame(spritesheet,96,176, this));
         obstacles.add(door);
     }
 
@@ -107,10 +108,11 @@ public class PuzzleMapScreen extends Actor {
                         obstacle = getObstacleAt(player.getX(), player.getY() + 8);
                         if (touchAndCanMoveTo(obstacle)) {
                             if (obstacle != door) {
-                                action = new PlayerMoveByAction(this);
+                                action = new PlayerMoveByAction(this, player);
                                 action.setAmount(0, 8);
                                 player.addAction(action);
                             } else {
+                                player.setDisplayDirection(UP);
                                 player.addAction(Actions.sequence(Actions.moveTo(door.getX(), door.getY(), 0.25f), new Action() {
                                     @Override
                                     public boolean act(float delta) {
@@ -120,28 +122,36 @@ public class PuzzleMapScreen extends Actor {
                                 }));
 
                             }
+                        } else {
+                            player.setDisplayDirection(player.getDirection());
                         }
                         break;
                     case DOWN:
                         if (touchAndCanMoveTo(getObstacleAt(player.getX(), player.getY() - 8))) {
-                            action = new PlayerMoveByAction(this);
+                            action = new PlayerMoveByAction(this, player);
                             action.setAmount(0, -8);
                             player.addAction(action);
+                        } else {
+                            player.setDisplayDirection(player.getDirection());
                         }
                         break;
                     case LEFT:
                         if (touchAndCanMoveTo(getObstacleAt(player.getX() - 8, player.getY()))) {
-                            action = new PlayerMoveByAction(this);
+                            action = new PlayerMoveByAction(this, player);
                             action.setAmount(-8, 0);
                             player.addAction(action);
+                        } else {
+                            player.setDisplayDirection(player.getDirection());
                         }
                         break;
                     case RIGHT:
                         if (touchAndCanMoveTo(getObstacleAt(player.getX() + 8, player.getY()))) {
-                            action = new PlayerMoveByAction(this);
+                            action = new PlayerMoveByAction(this, player);
                             action.setAmount(8, 0);
                             player.addAction(action);
 
+                        } else {
+                            player.setDisplayDirection(player.getDirection());
                         }
                         break;
 
@@ -169,21 +179,6 @@ public class PuzzleMapScreen extends Actor {
         }));
     }
 
-    /**
-     * Ejects things from walls, things from things, etc
-     */
-    private void ejectionCleanup() {
-
-
-        obstacles.forEach(obstacle -> {
-            Actor actor = obstacle;
-            if (getObstacleAt(actor.getX(), actor.getY(), obstacle) != net.saga.game.cloclo.characters.obstacle.Obstacle.EMPTY) {
-                actor.setX(round(actor.getX(), 8));
-                actor.setY(round(actor.getY(), 8));
-            }
-        });
-
-    }
 
     public float round(float x, int i) {
         return i * (Math.round(x / i));

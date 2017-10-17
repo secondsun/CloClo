@@ -20,6 +20,7 @@ public abstract class Player extends Actor implements ControlEventHandler {
 
     protected final Texture spriteSheet;
     private CloCloInputEvent direction = DOWN;
+    private CloCloInputEvent displayDirection = DOWN;
     private boolean walking = false;
     private float stateTime = 0;
     private Controller controller;
@@ -40,12 +41,12 @@ public abstract class Player extends Actor implements ControlEventHandler {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (walking || victory) {
+        if (walking || victory ) {
             stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         }
         // Get current frame of animation for the current stateTime
         if (!victory) {
-            TextureRegion currentFrame = directionAnimationMap.get(direction).getKeyFrame(stateTime, true);
+            TextureRegion currentFrame = directionAnimationMap.get(displayDirection).getKeyFrame(stateTime, true);
             batch.draw(currentFrame, super.getX(), getY());
         } else {
             TextureRegion currentFrame = victoryAnimation.getKeyFrame(stateTime, true);
@@ -61,22 +62,19 @@ public abstract class Player extends Actor implements ControlEventHandler {
                     resetWalk();
                     break;
                 case UP:
-                    resetWalk();
                     walking = true;
                     direction = UP;
                     break;
                 case DOWN:
-                    resetWalk();
                     walking = true;
                     direction = DOWN;
                     break;
                 case RIGHT:
-                    resetWalk();
                     walking = true;
                     direction = RIGHT;
                     break;
                 case LEFT:
-                    resetWalk();
+
                     walking = true;
                     direction = LEFT;
                     break;
@@ -87,9 +85,17 @@ public abstract class Player extends Actor implements ControlEventHandler {
 
 
 
-    private void resetWalk() {
+    public void resetWalk() {
         stateTime = 0;
         walking = false;
+    }
+
+    public CloCloInputEvent getDisplayDirection() {
+        return displayDirection;
+    }
+
+    public void setDisplayDirection(CloCloInputEvent displayDirection) {
+        this.displayDirection = displayDirection;
     }
 
     protected abstract Map<CloCloInputEvent, Animation<TextureRegion>> buildeWalkingMap();

@@ -7,7 +7,7 @@ import net.saga.game.cloclo.characters.CloCloInputEvent;
 import java.util.EnumSet;
 import java.util.HashMap;
 
-public class KeyboardControlEventSource  extends ControlEventSource implements InputProcessor{
+public class KeyboardControlEventSource extends ControlEventSource implements InputProcessor {
 
     private final HashMap<Integer, CloCloInputEvent> buttonMappings = new HashMap<>();
     private final EnumSet<CloCloInputEvent> downSet = EnumSet.noneOf(CloCloInputEvent.class);
@@ -50,9 +50,47 @@ public class KeyboardControlEventSource  extends ControlEventSource implements I
             downSet.remove(mapping);
             if (!directionKeysAreDown()) {
                 emit(CloCloInputEvent.CENTER);
+            } else {
+                if (directionKeysAreDownCount() == 1) {
+                    emit(getSingleDirectionKeyDown());
+                }
             }
         }
         return false;
+    }
+
+    private CloCloInputEvent getSingleDirectionKeyDown() {
+        if (downSet.contains(CloCloInputEvent.DOWN)) {
+            return CloCloInputEvent.DOWN;
+        }
+        if (downSet.contains(CloCloInputEvent.LEFT)) {
+            return CloCloInputEvent.LEFT;
+        }
+        if (downSet.contains(CloCloInputEvent.RIGHT)) {
+            return CloCloInputEvent.RIGHT;
+        }
+        if (downSet.contains(CloCloInputEvent.UP)) {
+            return CloCloInputEvent.UP;
+        }
+        return CloCloInputEvent.CENTER;
+    }
+
+    private int directionKeysAreDownCount() {
+        int down = 0;
+        if (downSet.contains(CloCloInputEvent.DOWN)) {
+            down++;
+        }
+        if (downSet.contains(CloCloInputEvent.LEFT)) {
+            down++;
+        }
+        if (downSet.contains(CloCloInputEvent.RIGHT)) {
+            down++;
+        }
+        if (downSet.contains(CloCloInputEvent.UP)) {
+            down++;
+        }
+        return down;
+
     }
 
     @Override
