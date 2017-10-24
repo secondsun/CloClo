@@ -3,7 +3,7 @@ package net.saga.game.cloclo.characters.obstacle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import net.saga.game.cloclo.characters.CloCloInputEvent;
+import net.saga.game.cloclo.control.CloCloInputEvent;
 
 /**
  * A tree is an non interactable object that does not move, prevents the player from moving through it,

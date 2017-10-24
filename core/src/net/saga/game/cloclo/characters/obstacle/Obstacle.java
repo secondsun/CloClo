@@ -2,7 +2,7 @@ package net.saga.game.cloclo.characters.obstacle;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import net.saga.game.cloclo.characters.CloCloInputEvent;
+import net.saga.game.cloclo.control.CloCloInputEvent;
 
 import static net.saga.game.cloclo.characters.obstacle.Characteristic.PASSABLE;
 

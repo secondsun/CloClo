@@ -1,25 +1,26 @@
-package net.saga.game.cloclo.characters;
+package net.saga.game.cloclo.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import net.saga.game.cloclo.ActorScreen;
+import net.saga.game.cloclo.characters.Boy;
+import net.saga.game.cloclo.characters.Player;
+import net.saga.game.cloclo.characters.PlayerMoveByAction;
 import net.saga.game.cloclo.characters.obstacle.*;
 import net.saga.game.cloclo.characters.obstacle.Obstacle;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
-import net.saga.game.farfar.util.abstraction.OnButtonDown;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.saga.game.cloclo.characters.CloCloInputEvent.DOWN;
-import static net.saga.game.cloclo.characters.CloCloInputEvent.UP;
+import static net.saga.game.cloclo.control.CloCloInputEvent.DOWN;
+import static net.saga.game.cloclo.control.CloCloInputEvent.UP;
 
 /**
  * This is a normal gameplay level.
@@ -29,7 +30,7 @@ import static net.saga.game.cloclo.characters.CloCloInputEvent.UP;
  * A screen also process all logic to a level such as if a player pushes a block to block moves,
  * checking if enemies can affect the player, etc
  */
-public class PuzzleMapScreen extends Actor {
+public class PuzzleMapScreen extends ActorScreen {
 
 
     private final TextureRegion frame;
@@ -263,7 +264,19 @@ public class PuzzleMapScreen extends Actor {
         return obstacles.stream().noneMatch(obj -> obj instanceof HeartFrame);
     }
 
+    @Override
     public void addControlSource(KeyboardControlEventSource source) {
+        this.source = source;
         source.addHandler(player);
+    }
+
+    @Override
+    public void removeControlSource() {
+        source.removeHandler(player);
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

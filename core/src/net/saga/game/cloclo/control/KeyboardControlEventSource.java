@@ -2,7 +2,6 @@ package net.saga.game.cloclo.control;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import net.saga.game.cloclo.characters.CloCloInputEvent;
 
 import java.util.EnumSet;
 import java.util.HashMap;

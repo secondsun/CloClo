@@ -3,10 +3,11 @@ package net.saga.game.cloclo.characters;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import net.saga.game.cloclo.characters.obstacle.HeartFrame;
 import net.saga.game.cloclo.characters.obstacle.Obstacle;
+import net.saga.game.cloclo.screens.PuzzleMapScreen;
 
 public class PlayerMoveByAction extends MoveByAction {
 
-    private final PuzzleMapScreen screen;
+    private final net.saga.game.cloclo.screens.PuzzleMapScreen screen;
 
 
     public PlayerMoveByAction(PuzzleMapScreen screen, Player player) {

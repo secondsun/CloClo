@@ -1,7 +1,7 @@
 package net.saga.game.cloclo.characters.obstacle;
 
-import net.saga.game.cloclo.characters.CloCloInputEvent;
-import net.saga.game.cloclo.characters.PuzzleMapScreen;
+import net.saga.game.cloclo.control.CloCloInputEvent;
+import net.saga.game.cloclo.screens.PuzzleMapScreen;
 
 import java.util.List;
 import java.util.stream.Collectors;

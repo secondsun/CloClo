@@ -2,23 +2,14 @@ package net.saga.game.cloclo;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import net.saga.game.cloclo.characters.Boy;
-import net.saga.game.cloclo.characters.PuzzleMapScreen;
+import net.saga.game.cloclo.screens.HomeScreen;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
-import net.saga.game.farfar.util.abstraction.OnButtonDown;
-import net.saga.game.farfar.util.controller.LoggingControllerListenerProxyUtil;
+import net.saga.game.cloclo.screens.PuzzleMapScreen;
 import net.saga.game.farfar.util.player.PlayerController;
 
 public class CloCloGame extends ApplicationAdapter {
@@ -30,12 +21,13 @@ public class CloCloGame extends ApplicationAdapter {
 
     private Stage stage;
     private Texture globalSheet;
-    private PuzzleMapScreen mapScreen;
+    private ActorScreen mapScreen;
 
     @Override
 	public void create () {
         globalSheet = new Texture(Gdx.files.internal("spritesheet.png"));
-        this.mapScreen = new PuzzleMapScreen(globalSheet);
+        //this.mapScreen = new PuzzleMapScreen(globalSheet);
+        this.mapScreen = new HomeScreen(this);
         viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT);
         stage = new Stage(viewport);
         stage.addActor(mapScreen);
@@ -78,5 +70,14 @@ public class CloCloGame extends ApplicationAdapter {
     }
 
 
+    public void switchToPuzzleMapScreen() {
+        stage.getActors().removeIndex(0);
+        this.mapScreen.removeControlSource();
+        this.mapScreen = new PuzzleMapScreen(globalSheet);
+        KeyboardControlEventSource source = new KeyboardControlEventSource();
+        Gdx.input.setInputProcessor(source);
+        mapScreen.addControlSource(source);
+        stage.addActor(mapScreen);
+    }
 
 }

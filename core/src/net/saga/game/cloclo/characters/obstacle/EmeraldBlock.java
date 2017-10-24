@@ -3,8 +3,8 @@ package net.saga.game.cloclo.characters.obstacle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import net.saga.game.cloclo.characters.CloCloInputEvent;
-import net.saga.game.cloclo.characters.PuzzleMapScreen;
+import net.saga.game.cloclo.control.CloCloInputEvent;
+import net.saga.game.cloclo.screens.PuzzleMapScreen;
 
 import static net.saga.game.cloclo.characters.obstacle.Characteristic.PUSHABLE;
 

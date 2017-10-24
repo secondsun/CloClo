@@ -2,31 +2,29 @@ package net.saga.game.cloclo.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.ControllerListener;
-import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import net.saga.game.cloclo.control.CloCloInputEvent;
 import net.saga.game.cloclo.control.ControlEventHandler;
 
 import java.util.Map;
 
-import static net.saga.game.cloclo.characters.CloCloInputEvent.*;
+import static net.saga.game.cloclo.control.CloCloInputEvent.*;
 
 public abstract class Player extends Actor implements ControlEventHandler {
 
     protected final Texture spriteSheet;
-    private CloCloInputEvent direction = DOWN;
-    private CloCloInputEvent displayDirection = DOWN;
+    private net.saga.game.cloclo.control.CloCloInputEvent direction = DOWN;
+    private net.saga.game.cloclo.control.CloCloInputEvent displayDirection = DOWN;
     private boolean walking = false;
     private float stateTime = 0;
     private Controller controller;
 
     private final Animation<TextureRegion> victoryAnimation;
-    private final Map<CloCloInputEvent, Animation<TextureRegion>> directionAnimationMap;
+    private final Map<net.saga.game.cloclo.control.CloCloInputEvent, Animation<TextureRegion>> directionAnimationMap;
     private boolean victory = false;
 
 
@@ -55,7 +53,7 @@ public abstract class Player extends Actor implements ControlEventHandler {
     }
 
     @Override
-    public boolean onEvent(CloCloInputEvent value) {
+    public boolean onEvent(net.saga.game.cloclo.control.CloCloInputEvent value) {
 
             switch (value) {
                 case CENTER:
@@ -90,21 +88,21 @@ public abstract class Player extends Actor implements ControlEventHandler {
         walking = false;
     }
 
-    public CloCloInputEvent getDisplayDirection() {
+    public net.saga.game.cloclo.control.CloCloInputEvent getDisplayDirection() {
         return displayDirection;
     }
 
-    public void setDisplayDirection(CloCloInputEvent displayDirection) {
+    public void setDisplayDirection(net.saga.game.cloclo.control.CloCloInputEvent displayDirection) {
         this.displayDirection = displayDirection;
     }
 
-    protected abstract Map<CloCloInputEvent, Animation<TextureRegion>> buildeWalkingMap();
+    protected abstract Map<net.saga.game.cloclo.control.CloCloInputEvent, Animation<TextureRegion>> buildeWalkingMap();
 
     public boolean isWalking() {
         return walking;
     }
 
-    public CloCloInputEvent getDirection() {
+    public net.saga.game.cloclo.control.CloCloInputEvent getDirection() {
         return direction;
     }
 

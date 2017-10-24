@@ -1,7 +1,5 @@
 package net.saga.game.cloclo.control;
 
-import net.saga.game.cloclo.characters.CloCloInputEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 

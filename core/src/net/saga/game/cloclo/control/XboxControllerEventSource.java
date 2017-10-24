@@ -4,9 +4,8 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import net.saga.game.cloclo.characters.CloCloInputEvent;
 
-import static net.saga.game.cloclo.characters.CloCloInputEvent.*;
+import static net.saga.game.cloclo.control.CloCloInputEvent.*;
 
 public class XboxControllerEventSource extends ControlEventSource implements ControllerListener{
 
