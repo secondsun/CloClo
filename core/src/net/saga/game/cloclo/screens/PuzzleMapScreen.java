@@ -14,6 +14,7 @@ import net.saga.game.cloclo.characters.PlayerMoveByAction;
 import net.saga.game.cloclo.characters.obstacle.*;
 import net.saga.game.cloclo.characters.obstacle.Obstacle;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
+import net.saga.game.cloclo.levelloader.MapData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,28 +40,30 @@ public class PuzzleMapScreen extends ActorScreen {
     private final List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacles = new ArrayList<>(100);
     private final Door door;
     private boolean ended = false;
-    public PuzzleMapScreen(Texture spritesheet) {
+    public PuzzleMapScreen(Texture spritesheet, MapData mapData) {
         frame = new TextureRegion(spritesheet, 128, 0, 208, 216);
         floorTile = new TextureRegion(spritesheet, 128, 217, 16, 16);
         this.player = new Boy(spritesheet);
-        this.player.setX(16);
-        this.player.setY(16);
-        this.door = new Door(spritesheet, 96,192, this);
-        loadObstacles(spritesheet);
+        this.player.setX(mapData.metadata.start.x);
+        this.player.setY(mapData.metadata.start.y);
+        this.door = new Door(spritesheet, mapData.metadata.door.x, mapData.metadata.door.y, this);
+        loadObstacles(spritesheet, mapData);
 
     }
 
-    private void loadObstacles(Texture spritesheet) {
-        for (int i = 2; i < 8; i++) {
-            for (int j = 2; j < 8; j++) {
-                if (i % 3 == 1 && j % 3 == 1) {
-                    obstacles.add(new Tree(spritesheet, i * 16, j * 16));
-                    obstacles.add(new EmeraldBlock(spritesheet, (1 + i) * 16, j * 16, this));
+    private void loadObstacles(Texture spritesheet, MapData mapData) {
+         for (MapData.Point blockData : mapData.obstacles.emeraldBlock) {
+            obstacles.add(new EmeraldBlock(spritesheet, blockData.x, blockData.y,this));
+         }
 
-                }
-            }
+        for (MapData.Point blockData : mapData.obstacles.heartFrame) {
+            obstacles.add(new HeartFrame(spritesheet, blockData.x, blockData.y,this));
         }
-        obstacles.add(new HeartFrame(spritesheet,96,176, this));
+
+        for (MapData.Point blockData : mapData.obstacles.tree) {
+            obstacles.add(new Tree(spritesheet, blockData.x, blockData.y));
+        }
+
         obstacles.add(door);
     }
 
