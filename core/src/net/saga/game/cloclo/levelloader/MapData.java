@@ -10,7 +10,7 @@ public class MapData {
     }
 
     public static class Obstacles {
-        public Point[] emeraldBlock,heartFrame,tree;
+        public Point[] emeraldBlock,heartFrame,tree,snakey;
     }
 
     public static class Point {

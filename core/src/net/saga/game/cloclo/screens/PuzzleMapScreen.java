@@ -60,6 +60,10 @@ public class PuzzleMapScreen extends ActorScreen {
             obstacles.add(new HeartFrame(spritesheet, blockData.x, blockData.y,this));
         }
 
+        for (MapData.Point blockData : mapData.obstacles.snakey) {
+            obstacles.add(new Snakey(spritesheet, blockData.x, blockData.y,this));
+        }
+
         for (MapData.Point blockData : mapData.obstacles.tree) {
             obstacles.add(new Tree(spritesheet, blockData.x, blockData.y));
         }
@@ -281,5 +285,12 @@ public class PuzzleMapScreen extends ActorScreen {
     @Override
     public void dispose() {
 
+    }
+
+    public MapData.Point getPlayerPosition() {
+        MapData.Point point =  new MapData.Point();
+        point.x = (int) player.getX();
+        point.y = (int) player.getY();
+        return point;
     }
 }
