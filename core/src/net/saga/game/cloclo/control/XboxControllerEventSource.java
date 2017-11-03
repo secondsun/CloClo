@@ -3,6 +3,7 @@ package net.saga.game.cloclo.control;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector3;
 
 import static net.saga.game.cloclo.control.CloCloInputEvent.*;
@@ -27,6 +28,9 @@ public class XboxControllerEventSource extends ControlEventSource implements Con
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
+        if (Xbox.BACK == buttonCode) {
+            super.onEvent(BACK);
+        }
         return false;
     }
 

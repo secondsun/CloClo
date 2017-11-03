@@ -17,7 +17,7 @@ public class KeyboardControlEventSource extends ControlEventSource implements In
         buttonMappings.put(Input.Keys.DPAD_LEFT, CloCloInputEvent.LEFT);
         buttonMappings.put(Input.Keys.DPAD_RIGHT, CloCloInputEvent.RIGHT);
         buttonMappings.put(Input.Keys.ENTER, CloCloInputEvent.ACTION);
-
+        buttonMappings.put(Input.Keys.ESCAPE, CloCloInputEvent.BACK);
 
     }
 

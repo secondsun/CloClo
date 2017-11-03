@@ -2,13 +2,13 @@ package net.saga.game.cloclo.screens;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import net.saga.game.cloclo.ActorScreen;
+import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.CloCloGame;
 import net.saga.game.cloclo.control.CloCloInputEvent;
 import net.saga.game.cloclo.control.ControlEventHandler;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
 
-public class HomeScreen extends ActorScreen implements ControlEventHandler {
+public class HomeScreen extends ScreenActor implements ControlEventHandler {
 
     private static String[] MENU = {"SETTINGS", "EDITOR", "GAME"};
     private final CloCloGame game;
@@ -59,6 +59,9 @@ public class HomeScreen extends ActorScreen implements ControlEventHandler {
                 break;
             case DOWN:
                 selectionIndex--;
+                if (selectionIndex < 0) {
+                    selectionIndex = 2;
+                }
                 break;
             case LEFT:
                 break;

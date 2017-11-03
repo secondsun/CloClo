@@ -76,7 +76,8 @@ public abstract class Player extends Actor implements ControlEventHandler {
                     walking = true;
                     direction = LEFT;
                     break;
-
+                default:
+                    return false;
             }
         return true;
     }

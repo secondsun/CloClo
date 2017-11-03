@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import net.saga.game.cloclo.ActorScreen;
+import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.characters.Boy;
 import net.saga.game.cloclo.characters.Player;
 import net.saga.game.cloclo.characters.PlayerMoveByAction;
 import net.saga.game.cloclo.characters.obstacle.*;
 import net.saga.game.cloclo.characters.obstacle.Obstacle;
+import net.saga.game.cloclo.control.CloCloInputEvent;
+import net.saga.game.cloclo.control.ControlEventHandler;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
 import net.saga.game.cloclo.levelloader.MapData;
 
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.saga.game.cloclo.control.CloCloInputEvent.BACK;
 import static net.saga.game.cloclo.control.CloCloInputEvent.DOWN;
 import static net.saga.game.cloclo.control.CloCloInputEvent.UP;
 
@@ -31,7 +34,7 @@ import static net.saga.game.cloclo.control.CloCloInputEvent.UP;
  * A screen also process all logic to a level such as if a player pushes a block to block moves,
  * checking if enemies can affect the player, etc
  */
-public class PuzzleMapScreen extends ActorScreen {
+public class PuzzleMapScreen extends ScreenActor implements ControlEventHandler {
 
 
     private final TextureRegion frame;
@@ -40,6 +43,7 @@ public class PuzzleMapScreen extends ActorScreen {
     private final List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacles = new ArrayList<>(100);
     private final Door door;
     private boolean ended = false;
+
     public PuzzleMapScreen(Texture spritesheet, MapData mapData) {
         frame = new TextureRegion(spritesheet, 128, 0, 208, 216);
         floorTile = new TextureRegion(spritesheet, 128, 217, 16, 16);
@@ -52,16 +56,19 @@ public class PuzzleMapScreen extends ActorScreen {
     }
 
     private void loadObstacles(Texture spritesheet, MapData mapData) {
-         for (MapData.Point blockData : mapData.obstacles.emeraldBlock) {
-            obstacles.add(new EmeraldBlock(spritesheet, blockData.x, blockData.y,this));
-         }
+        for (MapData.Point blockData : mapData.obstacles.emeraldBlock) {
+            obstacles.add(new EmeraldBlock(spritesheet, blockData.x, blockData.y, this));
+        }
 
         for (MapData.Point blockData : mapData.obstacles.heartFrame) {
-            obstacles.add(new HeartFrame(spritesheet, blockData.x, blockData.y,this));
+            obstacles.add(new HeartFrame(spritesheet, blockData.x, blockData.y, this));
         }
 
         for (MapData.Point blockData : mapData.obstacles.snakey) {
-            obstacles.add(new Snakey(spritesheet, blockData.x, blockData.y,this));
+            obstacles.add(new Snakey(spritesheet, blockData.x, blockData.y, this));
+        }
+        for (MapData.Point blockData : mapData.obstacles.boulder) {
+            obstacles.add(new Boulder(spritesheet, blockData.x, blockData.y));
         }
 
         for (MapData.Point blockData : mapData.obstacles.tree) {
@@ -220,7 +227,7 @@ public class PuzzleMapScreen extends ActorScreen {
     public net.saga.game.cloclo.characters.obstacle.Obstacle getObstacleAt(float x, float y, net.saga.game.cloclo.characters.obstacle.Obstacle ignore) {
 
         if (x < 16 || x > 176 || y < 16 || y > 176) {
-            if (!door.checkBounds(x,y) || door.getX() != player.getX()) {
+            if (!door.checkBounds(x, y) || door.getX() != player.getX()) {
                 return net.saga.game.cloclo.characters.obstacle.Obstacle.BOUNDARY;
             }
         }
@@ -275,10 +282,12 @@ public class PuzzleMapScreen extends ActorScreen {
     public void addControlSource(KeyboardControlEventSource source) {
         this.source = source;
         source.addHandler(player);
+        source.addHandler(this);
     }
 
     @Override
     public void removeControlSource() {
+        source.removeHandler(this);
         source.removeHandler(player);
     }
 
@@ -288,9 +297,17 @@ public class PuzzleMapScreen extends ActorScreen {
     }
 
     public MapData.Point getPlayerPosition() {
-        MapData.Point point =  new MapData.Point();
+        MapData.Point point = new MapData.Point();
         point.x = (int) player.getX();
         point.y = (int) player.getY();
         return point;
+    }
+
+    @Override
+    public boolean onEvent(CloCloInputEvent direction) {
+        if (direction == BACK) {
+            System.exit(0);Gdx.app.exit();
+        }
+        return false;
     }
 }

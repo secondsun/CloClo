@@ -1,5 +1,5 @@
 package net.saga.game.cloclo.control;
 
 public enum CloCloInputEvent {
-    UP,DOWN,LEFT,RIGHT, ACTION, CENTER
+    UP,DOWN,LEFT,RIGHT, ACTION, CENTER, BACK
 }

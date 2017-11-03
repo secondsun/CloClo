@@ -7,7 +7,7 @@ import net.saga.game.cloclo.screens.PuzzleMapScreen;
 
 public class PlayerMoveByAction extends MoveByAction {
 
-    private final net.saga.game.cloclo.screens.PuzzleMapScreen screen;
+    private final PuzzleMapScreen screen;
 
 
     public PlayerMoveByAction(PuzzleMapScreen screen, Player player) {

@@ -22,7 +22,7 @@ public class CloCloGame extends ApplicationAdapter {
 
     private Stage stage;
     private Texture globalSheet;
-    private ActorScreen mapScreen;
+    private ScreenActor mapScreen;
 
     @Override
 	public void create () {
