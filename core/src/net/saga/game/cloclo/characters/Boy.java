@@ -54,7 +54,7 @@ public class Boy extends Player {
                 spriteSheet.getWidth() / FRAME_COLS,
                 spriteSheet.getHeight() / FRAME_ROWS);
 
-        // Place the regions into a 1D array in the correct order, starting from the top
+        // Place the regions into a 1D array in the correct order, starting from the bottom
         // left, going across first. The Animation constructor requires a 1D array.
         TextureRegion[] walkFrames = new TextureRegion[8];
         int index;

@@ -310,4 +310,8 @@ public class PuzzleMapScreen extends ScreenActor implements ControlEventHandler 
         }
         return false;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

@@ -11,6 +11,8 @@ import net.saga.game.cloclo.levelloader.LevelLoader;
 import net.saga.game.cloclo.screens.HomeScreen;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
 import net.saga.game.cloclo.screens.PuzzleMapScreen;
+import net.saga.game.cloclo.screens.components.ActorPanel;
+import net.saga.game.cloclo.screens.components.ActorPanelComposite;
 import net.saga.game.farfar.util.player.PlayerController;
 
 public class CloCloGame extends ApplicationAdapter {
@@ -31,19 +33,8 @@ public class CloCloGame extends ApplicationAdapter {
         this.mapScreen = new HomeScreen(this);
         viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT);
         stage = new Stage(viewport);
-        stage.addActor(mapScreen);
+        stage.addActor(new ActorPanelComposite(new ActorPanel(mapScreen)));
 
-
-//        if (controller == null) {
-//            controller = Controllers.getControllers().get(0);
-//            if (controller == null) {
-//                Gdx.app.error("TODO:", "Gracefull handle no controllers");
-//                throw new RuntimeException("No Controller");
-//            }
-//            Gdx.app.debug("Controller", controller.getName());
-//            mapScreen.addControllerListeners(controller);
-//        }
-//
 
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
@@ -78,7 +69,7 @@ public class CloCloGame extends ApplicationAdapter {
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
         mapScreen.addControlSource(source);
-        stage.addActor(mapScreen);
+        stage.addActor(new ActorPanelComposite(new ActorPanel(((PuzzleMapScreen)mapScreen))));
     }
 
 }

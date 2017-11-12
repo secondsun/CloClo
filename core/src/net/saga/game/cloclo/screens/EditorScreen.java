@@ -36,8 +36,14 @@ public class EditorScreen extends ScreenActor implements ControlEventHandler {
                 break;
             case BACK:
                 break;
+            case TAB:
+                switchPanel();
+                break;
         }
         return true;
+    }
+
+    private void switchPanel() {
     }
 
     @Override

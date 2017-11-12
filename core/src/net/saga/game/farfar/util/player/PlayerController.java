@@ -138,7 +138,7 @@ public class PlayerController implements DefaultControllerListener, Disposable, 
             // Clamp to bottom
             newY = screenBottom;
         } else if (top > screenTop) {
-            // Clamp to top
+            // Clamp to bottom
             newY = screenTop - halfHeight * 2;
         }
         
