@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import net.saga.game.cloclo.levelloader.LevelLoader;
@@ -25,7 +26,7 @@ public class CloCloGame extends ApplicationAdapter {
 
     private Stage stage;
     private Texture globalSheet;
-    private ScreenActor mapScreen;
+    private Table mapScreen;
 
     @Override
 	public void create () {
@@ -39,7 +40,7 @@ public class CloCloGame extends ApplicationAdapter {
 
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
-        mapScreen.addControlSource(source);
+        ((ScreenActor)mapScreen).addControlSource(source);
 	}
 
 
@@ -65,22 +66,22 @@ public class CloCloGame extends ApplicationAdapter {
 
     public void switchToPuzzleMapScreen() {
         stage.getActors().removeIndex(0);
-        this.mapScreen.removeControlSource();
+        ((ScreenActor)mapScreen).removeControlSource();
         this.mapScreen = new PuzzleMapScreen(globalSheet, LevelLoader.getDemoMapData());
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
-        mapScreen.addControlSource(source);
+        ((ScreenActor)mapScreen).addControlSource(source);
         stage.addActor(new ActorPanelComposite(new ActorPanel(((PuzzleMapScreen)mapScreen))));
     }
 
     public void switchToEditorScreen() {
         stage.getActors().removeIndex(0);
-        this.mapScreen.removeControlSource();
+        ((ScreenActor)mapScreen).removeControlSource();
         this.mapScreen = new EditorScreen(globalSheet);
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
-        mapScreen.addControlSource(source);
-        stage.addActor(new ActorPanelComposite(new ActorPanel(mapScreen)));
+        ((ScreenActor)mapScreen).addControlSource(source);
+        stage.addActor(mapScreen);
 
     }
 }

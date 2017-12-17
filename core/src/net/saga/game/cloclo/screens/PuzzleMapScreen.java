@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.characters.Boy;
 import net.saga.game.cloclo.characters.Player;
@@ -34,7 +35,7 @@ import static net.saga.game.cloclo.control.CloCloInputEvent.UP;
  * A screen also process all logic to a level such as if a player pushes a block to block moves,
  * checking if enemies can affect the player, etc
  */
-public class PuzzleMapScreen extends ScreenActor implements ControlEventHandler {
+public class PuzzleMapScreen extends Table implements ControlEventHandler, ScreenActor {
 
 
     private final TextureRegion frame;
@@ -43,6 +44,7 @@ public class PuzzleMapScreen extends ScreenActor implements ControlEventHandler 
     private final List<net.saga.game.cloclo.characters.obstacle.Obstacle> obstacles = new ArrayList<>(100);
     private final Door door;
     private boolean ended = false;
+    private KeyboardControlEventSource source;
 
     public PuzzleMapScreen(Texture spritesheet, MapData mapData) {
         frame = new TextureRegion(spritesheet, 128, 0, 208, 216);
@@ -313,5 +315,16 @@ public class PuzzleMapScreen extends ScreenActor implements ControlEventHandler 
 
     public Player getPlayer() {
         return player;
+    }
+
+
+    @Override
+    public KeyboardControlEventSource getSource() {
+        return source;
+    }
+
+    @Override
+    public void setSource(KeyboardControlEventSource source) {
+        this.source = source;
     }
 }

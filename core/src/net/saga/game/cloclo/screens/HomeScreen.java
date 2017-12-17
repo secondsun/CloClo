@@ -2,18 +2,20 @@ package net.saga.game.cloclo.screens;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.CloCloGame;
 import net.saga.game.cloclo.control.CloCloInputEvent;
 import net.saga.game.cloclo.control.ControlEventHandler;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
 
-public class HomeScreen extends ScreenActor implements ControlEventHandler {
+public class HomeScreen extends Table implements ControlEventHandler, ScreenActor {
 
     private static String[] MENU = {"SETTINGS", "EDITOR", "GAME"};
     private final CloCloGame game;
     private int selectionIndex = 0;
     private BitmapFont font = new BitmapFont();
+    private KeyboardControlEventSource source;
 
     public HomeScreen(CloCloGame game) {
         this.game = game;
@@ -41,14 +43,24 @@ public class HomeScreen extends ScreenActor implements ControlEventHandler {
     }
 
     @Override
-    public void addControlSource(KeyboardControlEventSource source) {
+    public KeyboardControlEventSource getSource() {
+        return source;
+    }
+
+    @Override
+    public void setSource(KeyboardControlEventSource source) {
         this.source = source;
-        this.source.addHandler(this);
+    }
+
+    @Override
+    public void addControlSource(KeyboardControlEventSource source) {
+        this.setSource( source) ;
+        this.getSource().addHandler(this);
     }
 
     @Override
     public void removeControlSource() {
-        this.source.removeHandler(this);
+        this.getSource().removeHandler(this);
     }
 
     @Override
