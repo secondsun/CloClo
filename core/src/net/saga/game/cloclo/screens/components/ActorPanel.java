@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Collection;
@@ -26,8 +27,9 @@ public class ActorPanel extends CloCloPanel {
     @Override
     public void draw(Batch batch) {
         Color old = batch.getColor();
-        if (selected ) {
-            batch.setColor(Color.BLUE);
+
+        if ( selected ) {
+            batch.setColor(Color.argb8888(1f,.8f,.8f,.8f));
         }
         actor.draw(batch, 1f);
         batch.setColor(old);

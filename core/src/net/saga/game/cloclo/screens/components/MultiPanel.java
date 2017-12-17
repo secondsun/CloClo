@@ -14,13 +14,24 @@ public class MultiPanel extends CloCloPanel {
     protected final TreeSet<CloCloPanel> children;
 
     public MultiPanel() {
-        children = new TreeSet<>(Comparator.comparingInt(child -> child.zIndex));
+        children = new TreeSet<>(new Comparator<CloCloPanel>() {
+            @Override
+            public int compare(CloCloPanel o1, CloCloPanel o2) {
+                if (o1.getzIndex() == o2.getzIndex()) {
+                    return o1.hashCode() - o2.hashCode();
+                } else {
+                    return o1.getzIndex() - o2.getzIndex();
+                }
+            }
+        });
     }
 
 
     @Override
     public void draw(Batch batch) {
-        children.forEach(child -> child.draw(batch));
+        children.forEach(
+                child -> child.draw(batch)
+        );
     }
 
     @Override

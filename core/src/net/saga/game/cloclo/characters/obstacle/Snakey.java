@@ -16,9 +16,9 @@ public class Snakey extends EnemyActor {
         this.puzzleMapScreen = screen;
         setX(x);
         setY(y);
-        straight = new TextureRegion(spritesheet, 0, 105,16,16);
-        left = new TextureRegion(spritesheet, 16, 105,16,16);
-        right = new TextureRegion(spritesheet, 32, 105,16,16);
+        straight = new TextureRegion(spritesheet, 0, 105, 16, 16);
+        left = new TextureRegion(spritesheet, 16, 105, 16, 16);
+        right = new TextureRegion(spritesheet, 32, 105, 16, 16);
     }
 
 
@@ -31,7 +31,16 @@ public class Snakey extends EnemyActor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        MapData.Point playerPosition = puzzleMapScreen.getPlayerPosition();
+
+        MapData.Point playerPosition;
+        if (puzzleMapScreen == null) {
+            playerPosition = new MapData.Point();
+            playerPosition.x = (int) getX();
+            playerPosition.y = (int) getY();
+        } else {
+            playerPosition = puzzleMapScreen.getPlayerPosition();
+        }
+
         int delta = (int) (getX() - playerPosition.x);
         if (delta > 32) {
             batch.draw(left, getX(), getY());

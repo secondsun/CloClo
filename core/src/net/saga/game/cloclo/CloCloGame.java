@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import net.saga.game.cloclo.levelloader.LevelLoader;
+import net.saga.game.cloclo.screens.EditorScreen;
 import net.saga.game.cloclo.screens.HomeScreen;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
 import net.saga.game.cloclo.screens.PuzzleMapScreen;
@@ -72,4 +73,14 @@ public class CloCloGame extends ApplicationAdapter {
         stage.addActor(new ActorPanelComposite(new ActorPanel(((PuzzleMapScreen)mapScreen))));
     }
 
+    public void switchToEditorScreen() {
+        stage.getActors().removeIndex(0);
+        this.mapScreen.removeControlSource();
+        this.mapScreen = new EditorScreen(globalSheet);
+        KeyboardControlEventSource source = new KeyboardControlEventSource();
+        Gdx.input.setInputProcessor(source);
+        mapScreen.addControlSource(source);
+        stage.addActor(new ActorPanelComposite(new ActorPanel(mapScreen)));
+
+    }
 }

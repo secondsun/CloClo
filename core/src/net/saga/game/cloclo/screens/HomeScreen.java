@@ -80,8 +80,12 @@ public class HomeScreen extends ScreenActor implements ControlEventHandler {
         switch (menu) {
             case "GAME":
                 game.switchToPuzzleMapScreen();
+                break;
             case "SETTINGS":
+                break;
             case "EDITOR":
+                game.switchToEditorScreen();
+                break;
         }
     }
 
