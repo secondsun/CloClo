@@ -1,14 +1,14 @@
 package net.saga.game.cloclo.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.characters.obstacle.*;
+import net.saga.game.cloclo.characters.obstacle.Tree;
 import net.saga.game.cloclo.control.CloCloInputEvent;
 import net.saga.game.cloclo.control.ControlEventHandler;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
@@ -26,21 +26,26 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
     private int cursorX = 0,cursorY = 0;
     private KeyboardControlEventSource source;
 
-    public EditorScreen(Texture spritesheet) {
+    public EditorScreen(Texture spritesheet, Skin skin) {
+        this.setFillParent(true);
+        this.align(Align.center);
         toolBarPanel = new HorizontalGroup();
+
         toolBarPanel.addActor(new Boulder(spritesheet, 0, 0));
         toolBarPanel.addActor(new Tree(spritesheet,0,0));
         toolBarPanel.addActor(new Snakey(spritesheet,0,0, null));
         toolBarPanel.addActor(new HeartFrame(spritesheet,0,0, null));
         toolBarPanel.addActor(new EmeraldBlock(spritesheet,0,0, null));
+        toolBarPanel.expand(true);
+        toolBarPanel.validate();
 
-
-        toolBarScrollPane = new ScrollPane(toolBarPanel);
+        toolBarScrollPane = new ScrollPane(toolBarPanel, skin);
         toolBarScrollPane.setWidth(200f);
         toolBarScrollPane.setX(16f);
         toolBarScrollPane.setY(216f);
         toolBarScrollPane.validate();
 
+        this.add(toolBarScrollPane).size(200f);
 
     }
 

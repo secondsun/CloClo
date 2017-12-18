@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,9 +28,12 @@ public class CloCloGame extends ApplicationAdapter {
     private Stage stage;
     private Texture globalSheet;
     private Table mapScreen;
+    private Skin skin;
 
     @Override
 	public void create () {
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
         globalSheet = new Texture(Gdx.files.internal("spritesheet.png"));
         //this.mapScreen = new PuzzleMapScreen(globalSheet);
         this.mapScreen = new HomeScreen(this);
@@ -41,6 +45,7 @@ public class CloCloGame extends ApplicationAdapter {
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
         ((ScreenActor)mapScreen).addControlSource(source);
+        switchToEditorScreen();
 	}
 
 
@@ -77,7 +82,8 @@ public class CloCloGame extends ApplicationAdapter {
     public void switchToEditorScreen() {
         stage.getActors().removeIndex(0);
         ((ScreenActor)mapScreen).removeControlSource();
-        this.mapScreen = new EditorScreen(globalSheet);
+        this.mapScreen = new EditorScreen(globalSheet, skin);
+        mapScreen.setSkin(skin);
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
         ((ScreenActor)mapScreen).addControlSource(source);
