@@ -16,6 +16,8 @@ public class Snakey extends EnemyActor {
         this.puzzleMapScreen = screen;
         setX(x);
         setY(y);
+        setWidth(16);
+        setHeight(16);
         straight = new TextureRegion(spritesheet, 0, 105, 16, 16);
         left = new TextureRegion(spritesheet, 16, 105, 16, 16);
         right = new TextureRegion(spritesheet, 32, 105, 16, 16);

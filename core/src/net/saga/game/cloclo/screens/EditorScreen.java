@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.characters.obstacle.*;
@@ -28,7 +31,9 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
 
     public EditorScreen(Texture spritesheet, Skin skin) {
         this.setFillParent(true);
+        setDebug(true);
         this.align(Align.center);
+        this.setBackground(new TextureRegionDrawable(new TextureRegion(spritesheet,0,106,48,16)));
         toolBarPanel = new HorizontalGroup();
 
         toolBarPanel.addActor(new Boulder(spritesheet, 0, 0));
@@ -36,16 +41,21 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
         toolBarPanel.addActor(new Snakey(spritesheet,0,0, null));
         toolBarPanel.addActor(new HeartFrame(spritesheet,0,0, null));
         toolBarPanel.addActor(new EmeraldBlock(spritesheet,0,0, null));
-        toolBarPanel.expand(true);
+
+        //toolBarPanel.setWidth(64f);
+        toolBarPanel.invalidate();
         toolBarPanel.validate();
 
         toolBarScrollPane = new ScrollPane(toolBarPanel, skin);
-        toolBarScrollPane.setWidth(200f);
         toolBarScrollPane.setX(16f);
         toolBarScrollPane.setY(216f);
+
+
+        toolBarScrollPane.invalidate();
         toolBarScrollPane.validate();
 
-        this.add(toolBarScrollPane).size(200f);
+        row();
+        add(toolBarScrollPane ).width(54f);
 
     }
 
@@ -63,11 +73,6 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
     @Override
     public void setSource(KeyboardControlEventSource source) {
         this.source = source;
-    }
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        toolBarScrollPane.draw(batch, parentAlpha);
     }
 
     @Override

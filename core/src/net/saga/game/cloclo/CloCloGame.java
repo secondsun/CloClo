@@ -27,7 +27,7 @@ public class CloCloGame extends ApplicationAdapter {
 
     private Stage stage;
     private Texture globalSheet;
-    private Table mapScreen;
+    private Table gameScreen;
     private Skin skin;
 
     @Override
@@ -35,16 +35,16 @@ public class CloCloGame extends ApplicationAdapter {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         globalSheet = new Texture(Gdx.files.internal("spritesheet.png"));
-        //this.mapScreen = new PuzzleMapScreen(globalSheet);
-        this.mapScreen = new HomeScreen(this);
+        //this.gameScreen = new PuzzleMapScreen(globalSheet);
+        this.gameScreen = new HomeScreen(this);
         viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT);
         stage = new Stage(viewport);
-        stage.addActor(new ActorPanelComposite(new ActorPanel(mapScreen)));
+        stage.addActor(new ActorPanelComposite(new ActorPanel(gameScreen)));
 
 
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
-        ((ScreenActor)mapScreen).addControlSource(source);
+        ((ScreenActor) gameScreen).addControlSource(source);
         switchToEditorScreen();
 	}
 
@@ -71,23 +71,23 @@ public class CloCloGame extends ApplicationAdapter {
 
     public void switchToPuzzleMapScreen() {
         stage.getActors().removeIndex(0);
-        ((ScreenActor)mapScreen).removeControlSource();
-        this.mapScreen = new PuzzleMapScreen(globalSheet, LevelLoader.getDemoMapData());
+        ((ScreenActor) gameScreen).removeControlSource();
+        this.gameScreen = new PuzzleMapScreen(globalSheet, LevelLoader.getDemoMapData());
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
-        ((ScreenActor)mapScreen).addControlSource(source);
-        stage.addActor(new ActorPanelComposite(new ActorPanel(((PuzzleMapScreen)mapScreen))));
+        ((ScreenActor) gameScreen).addControlSource(source);
+        stage.addActor(new ActorPanelComposite(new ActorPanel(((PuzzleMapScreen) gameScreen))));
     }
 
     public void switchToEditorScreen() {
         stage.getActors().removeIndex(0);
-        ((ScreenActor)mapScreen).removeControlSource();
-        this.mapScreen = new EditorScreen(globalSheet, skin);
-        mapScreen.setSkin(skin);
+        ((ScreenActor) gameScreen).removeControlSource();
+        this.gameScreen = new EditorScreen(globalSheet, skin);
+        gameScreen.setSkin(skin);
         KeyboardControlEventSource source = new KeyboardControlEventSource();
         Gdx.input.setInputProcessor(source);
-        ((ScreenActor)mapScreen).addControlSource(source);
-        stage.addActor(mapScreen);
+        ((ScreenActor) gameScreen).addControlSource(source);
+        stage.addActor(gameScreen);
 
     }
 }
