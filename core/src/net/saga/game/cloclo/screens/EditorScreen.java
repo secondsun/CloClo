@@ -1,23 +1,24 @@
 package net.saga.game.cloclo.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.characters.obstacle.*;
-import net.saga.game.cloclo.characters.obstacle.Tree;
 import net.saga.game.cloclo.control.CloCloInputEvent;
 import net.saga.game.cloclo.control.ControlEventHandler;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
-import net.saga.game.cloclo.screens.components.ActorPanel;
 import net.saga.game.cloclo.screens.components.ActorPanelComposite;
-import net.saga.game.cloclo.screens.components.MultiPanel;
 
 public class EditorScreen extends Table implements ControlEventHandler, ScreenActor  {
 
@@ -36,11 +37,11 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
         this.setBackground(new TextureRegionDrawable(new TextureRegion(spritesheet,0,106,48,16)));
         toolBarPanel = new HorizontalGroup();
 
-        toolBarPanel.addActor(new Boulder(spritesheet, 0, 0));
-        toolBarPanel.addActor(new Tree(spritesheet,0,0));
-        toolBarPanel.addActor(new Snakey(spritesheet,0,0, null));
-        toolBarPanel.addActor(new HeartFrame(spritesheet,0,0, null));
-        toolBarPanel.addActor(new EmeraldBlock(spritesheet,0,0, null));
+        toolBarPanel.addActor(attachLoggingListener(new Boulder(spritesheet, 0, 0)));
+        toolBarPanel.addActor(attachLoggingListener(new Tree(spritesheet,0,0)));
+        toolBarPanel.addActor(attachLoggingListener(new Snakey(spritesheet,0,0, null)));
+        toolBarPanel.addActor(attachLoggingListener(new HeartFrame(spritesheet,0,0, null)));
+        toolBarPanel.addActor(attachLoggingListener(new EmeraldBlock(spritesheet,0,0, null)));
 
         //toolBarPanel.setWidth(64f);
         toolBarPanel.invalidate();
@@ -49,7 +50,7 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
         toolBarScrollPane = new ScrollPane(toolBarPanel, skin);
         toolBarScrollPane.setX(16f);
         toolBarScrollPane.setY(216f);
-
+        toolBarScrollPane.getStyle().hScrollKnob = null;
 
         toolBarScrollPane.invalidate();
         toolBarScrollPane.validate();
@@ -57,6 +58,17 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
         row();
         add(toolBarScrollPane ).width(54f);
 
+    }
+
+    private Actor attachLoggingListener(final Actor actor) {
+        actor.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Clicked " + actor.getClass().getSimpleName());
+            }
+
+        });
+        return actor;
     }
 
     @Override

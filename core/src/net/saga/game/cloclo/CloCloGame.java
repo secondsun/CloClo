@@ -2,6 +2,7 @@ package net.saga.game.cloclo;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -85,7 +86,8 @@ public class CloCloGame extends ApplicationAdapter {
         this.gameScreen = new EditorScreen(globalSheet, skin);
         gameScreen.setSkin(skin);
         KeyboardControlEventSource source = new KeyboardControlEventSource();
-        Gdx.input.setInputProcessor(source);
+        InputMultiplexer plex = new InputMultiplexer(source, stage);
+        Gdx.input.setInputProcessor(plex);
         ((ScreenActor) gameScreen).addControlSource(source);
         stage.addActor(gameScreen);
 

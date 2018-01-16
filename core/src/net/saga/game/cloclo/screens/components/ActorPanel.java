@@ -29,7 +29,7 @@ public class ActorPanel extends CloCloPanel {
         Color old = batch.getColor();
 
         if ( selected ) {
-            batch.setColor(Color.argb8888(1f,.8f,.8f,.8f));
+            //batch.setColor(Color.argb8888(1f,.8f,.8f,.8f));
         }
         actor.draw(batch, 1f);
         batch.setColor(old);
