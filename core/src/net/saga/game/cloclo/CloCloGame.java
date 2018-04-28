@@ -47,6 +47,7 @@ public class CloCloGame extends ApplicationAdapter {
         Gdx.input.setInputProcessor(source);
         ((ScreenActor) gameScreen).addControlSource(source);
         switchToEditorScreen();
+        //switchToPuzzleMapScreen();
 	}
 
 
