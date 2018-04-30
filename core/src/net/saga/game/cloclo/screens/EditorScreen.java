@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Align;
 import net.saga.game.cloclo.ScreenActor;
 import net.saga.game.cloclo.characters.obstacle.*;
 import net.saga.game.cloclo.characters.obstacle.Tree;
+import net.saga.game.cloclo.characters.obstacle.editor.ExitPlacement;
+import net.saga.game.cloclo.characters.obstacle.editor.PlayerStart;
 import net.saga.game.cloclo.control.CloCloInputEvent;
 import net.saga.game.cloclo.control.ControlEventHandler;
 import net.saga.game.cloclo.control.KeyboardControlEventSource;
@@ -63,7 +65,8 @@ public class EditorScreen extends Table implements ControlEventHandler, ScreenAc
         toolBarPanel.addActor(attachLoggingListener(new Snakey(spritesheet,0,0, null)));
         toolBarPanel.addActor(attachLoggingListener(new HeartFrame(spritesheet,0,0, null)));
         toolBarPanel.addActor(attachLoggingListener(new EmeraldBlock(spritesheet,0,0, null)));
-
+        toolBarPanel.addActor(attachLoggingListener(new PlayerStart(spritesheet,0,0, null)));
+        toolBarPanel.addActor(attachLoggingListener(new ExitPlacement(spritesheet,0,0, null)));
 
         add(toolBarPanel ).left().height(32);
     }
